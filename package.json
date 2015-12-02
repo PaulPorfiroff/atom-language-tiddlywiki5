@@ -11,6 +11,7 @@
     "coffee-script": "^1.10.0",
     "gulp": "^3.9.0",
     "gulp-change": "^1.0.0",
+    "gulp-coffeelint": "^0.5.0",
     "gulp-plumber": "^1.0.1",
     "gulp-rename": "^1.2.2",
     "season": "^5.3.0"
