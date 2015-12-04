@@ -14,8 +14,14 @@ grammar =
     wikitext:
       patterns: [
         {
+          include: "#horizrule"
+        }
+        {
           include: "text.html.basic"
         }
       ]
+    horizrule:
+      match: "^\\s*-{3,}$"
+      name: "meta.separator.hr.tw5"
 
 module.exports = grammar
