@@ -8,7 +8,9 @@ CSON = require 'season'
 
 gulp.task 'build-grammars', ->
   gulp.src './src/grammars/*.coffee'
-      .pipe plumber()
+      .pipe plumber (error) ->
+        console.log error.toString()
+        @emit('end')
       .pipe coffeelint()
       .pipe coffeelint.reporter()
       .pipe coffeelint.reporter('fail')
