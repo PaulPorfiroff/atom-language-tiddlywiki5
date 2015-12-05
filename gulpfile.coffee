@@ -7,7 +7,7 @@ coffee = require 'coffee-script'
 CSON = require 'season'
 
 gulp.task 'build-grammars', ->
-  gulp.src './src/grammars/*.coffee'
+  gulp.src 'src/grammars/*.coffee'
       .pipe plumber (error) ->
         console.log error.toString()
         @emit('end')
@@ -19,7 +19,7 @@ gulp.task 'build-grammars', ->
       .pipe gulp.dest './grammars'
 
 gulp.task 'watch-grammars', ->
-  gulp.watch './src/grammars/*.coffee', ['build-grammars']
+  gulp.watch 'src/grammars/*.coffee', ['build-grammars']
 
 gulp.task 'watch', ['watch-grammars']
 gulp.task 'build', ['build-grammars']
