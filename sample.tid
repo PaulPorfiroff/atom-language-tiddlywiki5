@@ -1,3 +1,17 @@
+* ''bold''
+* //italic//
+* __underscore__
+* ^^superscript^^
+* ,,subscript,,
+* ~~strikethrough~~
+
+* ''bold //italic// __underscore__ ^^superscript^^ ,,subscript,, ~~strikethrough~~''
+* //italic ''bold'' __underscore__ ^^superscript^^ ,,subscript,, ~~strikethrough~~//
+* __underscore ''bold'' //italic// ^^superscript^^ ,,subscript,, ~~strikethrough~~__
+* ^^superscript ''bold'' //italic// __underscore__ ,,subscript,, ~~strikethrough~~^^
+* ,,subscript ''bold'' //italic// __underscore__ ^^superscript^^ ~~strikethrough~~,,
+* ~~strikethrough ''bold'' //italic// __underscore__ ^^superscript^^ ,,subscript,, ~~
+
 ---
     ---
         -----

@@ -14,12 +14,53 @@ grammar =
     wikitext:
       patterns: [
         {
-          include: "#horizrule"
+          include: "#block"
+        }
+        {
+          include: "#inline"
         }
         {
           include: "text.html.basic"
         }
       ]
+    inline:
+      patterns: [
+        {
+          include: "#emphasis"
+        }
+      ]
+    block:
+      patterns: [
+        {
+          include: "#horizrule"
+        }
+      ]
+
+    emphasis:
+      patterns:
+        {
+          begin: mark
+          end: mark
+          contentName: "#{name}.markup.tw5"
+          beginCaptures:
+            0:
+              name: "#{name}.punctuation.definition.markup.begin.tw5"
+          endCaptures:
+            0:
+              name: "#{name}.punctuation.definition.markup.end.tw5"
+          patterns: [
+            {
+              include: "#inline"
+            }
+          ]
+        } for mark, name of {
+          "''": "bold"
+          "//": "italic"
+          "__": "underscore"
+          "\\^\\^": "superscript"
+          ",,": "subscript"
+          "~~": "strikethrough"
+        }
     horizrule:
       match: "^\\s*-{3,}$"
       name: "meta.separator.hr.tw5"
