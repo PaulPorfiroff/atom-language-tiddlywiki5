@@ -28,6 +28,9 @@ grammar =
         {
           include: "#emphasis"
         }
+        {
+          include: "#codeinline"
+        }
       ]
     block:
       patterns: [
@@ -61,6 +64,17 @@ grammar =
           ",,": "subscript"
           "~~": "strikethrough"
         }
+    codeinline:
+      begin: "``?"
+      end: "\\0"
+      contentName: "markup.raw.tw5"
+      beginCaptures:
+        0:
+          name: "punctuation.definition.raw.markup.begin.tw5"
+      endCaptures:
+        0:
+          name: "punctuation.definition.raw.markup.end.tw5"
+
     horizrule:
       match: "^\\s*-{3,}$"
       name: "meta.separator.hr.tw5"
