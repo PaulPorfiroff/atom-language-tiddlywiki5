@@ -40,6 +40,9 @@ grammar =
         {
           include: "#codeinline"
         }
+        {
+          include: "#hardlinebreaks"
+        }
       ]
     block:
       patterns: [
@@ -104,6 +107,21 @@ grammar =
       endCaptures:
         0:
           name: "punctuation.definition.raw.markup.end.tw5"
+    hardlinebreaks:
+      begin: "\"\"\""
+      end: "\\0"
+      contentName: "markup.other.paragraph.tw5"
+      beginCaptures:
+        0:
+          name: "punctuation.definition.paragraph.markup.begin.tw5"
+      endCaptures:
+        0:
+          name: "punctuation.definition.paragraph.markup.end.tw5"
+      patterns: [
+        {
+          include: "#inline"
+        }
+      ]
 
     codeblock:
       begin: "^\\s*(```)(?=[\\w-]*$)"

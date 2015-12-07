@@ -38,6 +38,14 @@ Defaults to raw block
 1 << i for i in [0..31] when i % 2
 ```
 
+"""
+Here be
+''hard line breaks''
+""" Not
+here """Single line break
+translates to `<br>` in HTML.""" And
+not here
+
 ---
     ---
         -----
