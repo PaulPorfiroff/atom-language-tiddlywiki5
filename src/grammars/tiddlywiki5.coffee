@@ -14,6 +14,9 @@ grammar =
     wikitext:
       patterns: [
         {
+          include: "#pragma"
+        }
+        {
           include: "#block"
         }
         {
@@ -21,6 +24,12 @@ grammar =
         }
         {
           include: "text.html.basic"
+        }
+      ]
+    pragma:
+      patterns: [
+        {
+          include: "#rules"
         }
       ]
     inline:
@@ -41,6 +50,24 @@ grammar =
           include: "#horizrule"
         }
       ]
+
+    rules:
+      match: "^(\\\\)(rules)\\s+(only|except)?(.*)$"
+      name: "meta.pragma.rules.comment.tw5"
+      captures:
+        1:
+          name: "punctuation.definition.pragma.tw5"
+        2:
+          name: "keyword.other.rules.tw5"
+        3:
+          name: "keyword.other.$3.tw5"
+        4:
+          patterns: [
+            {
+              match: "\\S+"
+              name: "variable.parameter.tw5"
+            }
+          ]
 
     emphasis:
       patterns:

@@ -1,3 +1,9 @@
+\rules does not amend parser rules without only or except
+\rules except rules
+\rules except bold italic heading
+\rules only table
+\rules only html dash entity
+
 * ''bold''
 * //italic//
 * __underscore__
