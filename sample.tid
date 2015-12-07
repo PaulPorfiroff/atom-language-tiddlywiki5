@@ -20,6 +20,18 @@
 * `raw``raw`not raw
 * ``raw` `raw``not raw
 
+```
+Raw block
+```
+
+```unknown-language
+Defaults to raw block
+```
+
+```CoFfEe
+1 << i for i in [0..31] when i % 2
+```
+
 ---
     ---
         -----

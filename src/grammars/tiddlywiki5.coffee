@@ -35,6 +35,9 @@ grammar =
     block:
       patterns: [
         {
+          include: "#codeblock"
+        }
+        {
           include: "#horizrule"
         }
       ]
@@ -75,6 +78,62 @@ grammar =
         0:
           name: "punctuation.definition.raw.markup.end.tw5"
 
+    codeblock:
+      begin: "^\\s*(```)(?=[\\w-]*$)"
+      end: "^(```)$"
+      name: "meta.codeblock.tw5"
+      beginCaptures:
+        1:
+          name: "punctuation.definition.raw.markup.begin.tw5"
+      endCaptures:
+        1:
+          name: "punctuation.definition.raw.markup.end.tw5"
+      patterns: [
+        {
+          begin: "(?i)\\G(#{language})$"
+          end: "(?=^```$)"
+          contentName: "#{scope}.tw5"
+          beginCaptures:
+            1:
+              name: "entity.other.attribute-name"
+          patterns: [
+            {
+              include: scope
+            }
+          ]
+        } for language, scope of {
+          "m(?:arkdown|d|kd(?:own)?)": "source.gfm"
+          "gemspec|irb|podspec|r(?:b|uby)|thor": "source.ruby"
+          "m(?:ak(?:efile)?|k)": "source.makefile"
+          "json": "source.json"
+          "atom|rss|xhtml": "text.xml"
+          "xsl": "text.xml.xsl"
+          "html": "text.html.basic"
+          "plist": "text.xml.plist"
+          "css": "source.css"
+          "p(?:erl|l)": "source.perl"
+          "cs(?:harp)?": "source.cs"
+          "obj(?:\\-c|c|ectivec)": "source.objc"
+          "mm": "source.objcpp"
+          "gyp|py(?:thon)?": "source.python"
+          "java": "source.java"
+          "jsp": "text.html.jsp"
+          "bash|sh|zsh": "source.shell"
+          "sql": "source.sql"
+          "c|p": "source.c"
+          "c(?:\\+\\+|c|pp)|h(?:\\+\\+|pp)": "source.cpp"
+          "php(?:3|4|5|6)?": "text.html.php"
+          "ini|toml": "source.toml"
+          "diff|patch": "text.git-commit"
+          "c(?:offee(?:script)?|son)|iced": "source.coffee"
+          "j(?:avascript|s)": "source.js"
+        }...
+        {
+          begin: "\\G[\\w-]*$"
+          end: "(?=^```$)"
+          contentName: "markup.raw.tw5"
+        }
+      ]
     horizrule:
       match: "^\\s*-{3,}$"
       name: "meta.separator.hr.tw5"
