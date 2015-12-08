@@ -148,7 +148,7 @@ grammar =
           contentName: "#{scope}.tw5"
           beginCaptures:
             1:
-              name: "entity.other.attribute-name"
+              name: "entity.other.attribute-name.language.tw5"
           patterns: [
             {
               include: scope
@@ -182,9 +182,14 @@ grammar =
           "j(?:avascript|s)": "source.js"
         }...
         {
-          begin: "\\G[\\w-]*$"
+          begin: "\\G([\\w-]*)$"
           end: "(?=^```$)"
           contentName: "markup.raw.tw5"
+          beginCaptures:
+            1:
+              name: "entity.other.attribute-name.language.tw5"
+        }
+      ]
     typedblock:
       begin: "^\\s*(\\$\\$\\$)(?=[^\\s>]*(?:\\s*>\\s*\\S+)?$)"
       end: "^(\\$\\$\\$)$"
