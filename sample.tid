@@ -59,6 +59,35 @@ Defaults to raw block
 1 << i for i in [0..31] when i % 2
 ```
 
+$$$.js
+/* Use JS parser */
+$$$
+$$$application/javascript
+/* Use JS parser */
+$$$
+$$$.js > type
+/* Use JS parser */
+$$$
+$$$application/javascript > type
+/* Use JS parser */
+$$$
+
+$$$.unknown
+Default to plain text parser.
+$$$
+$$$type/unknown
+Default to plain text parser.
+$$$
+$$$.unknown > type
+Default to plain text parser.
+$$$
+$$$type/unknown > type
+Default to plain text parser.
+$$$
+$$$
+Default to plain text parser.
+$$$
+
 """
 Here be
 ''hard line breaks''

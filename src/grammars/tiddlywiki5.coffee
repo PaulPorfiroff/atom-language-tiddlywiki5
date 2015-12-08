@@ -52,6 +52,9 @@ grammar =
           include: "#codeblock"
         }
         {
+          include: "#typedblock"
+        }
+        {
           include: "#heading"
         }
         {
@@ -182,6 +185,54 @@ grammar =
           begin: "\\G[\\w-]*$"
           end: "(?=^```$)"
           contentName: "markup.raw.tw5"
+    typedblock:
+      begin: "^\\s*(\\$\\$\\$)(?=[^\\s>]*(?:\\s*>\\s*\\S+)?$)"
+      end: "^(\\$\\$\\$)$"
+      name: "meta.typedblock.tw5"
+      beginCaptures:
+        1:
+          name: "punctuation.definition.typedblock.begin.tw5"
+      endCaptures:
+        1:
+          name: "punctuation.definition.typedblock.end.tw5"
+      patterns: [
+        {
+          begin: "\\G(#{parseType})(?:\\s*(>)\\s*(\\S+))?$"
+          end: "(?=^\\$\\$\\$$)"
+          contentName: "#{scope}.tw5"
+          beginCaptures:
+            1:
+              name: "entity.other.attribute-name.parse.tw5"
+            2:
+              name: "punctuation.definition.typedblock.render.tw5"
+            3:
+              name: "entity.other.attribute-name.render.tw5"
+          patterns: [
+            {
+              include: scope
+            }
+          ]
+        } for parseType, scope of {
+          "\\.tid|application\\/x\\-tiddler": "#wikitext"
+          "\\.css|text\\/css": "source.css"
+          "\\.html?|text\\/html": "text.html.basic"
+          "\\.hta|application\\/hta": "text.html.basic"
+          "\\.js|application\\/javascript": "source.js"
+          "\\.json|application\\/json": "source.json"
+          "\\.svg|image\\/svg\\+xml": "text.xml"
+          "\\.m(?:arkdown|d)|text\\/x\\-markdown": "source.gfm"
+        }...
+        {
+          begin: "\\G([^\\s>]*)(?:\\s*(>)\\s*(\\S+))?$"
+          end: "(?=^\\$\\$\\$$)"
+          contentName: "markup.raw.tw5"
+          beginCaptures:
+            1:
+              name: "entity.other.attribute-name.parse.tw5"
+            2:
+              name: "punctuation.definition.typedblock.render.tw5"
+            3:
+              name: "entity.other.attribute-name.render.tw5"
         }
       ]
     heading:
