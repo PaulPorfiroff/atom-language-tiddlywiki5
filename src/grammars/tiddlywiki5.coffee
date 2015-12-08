@@ -1,3 +1,5 @@
+classesRegex = "(?:\\.(?:[^\\s\\.]+))+"
+
 grammar =
   name: "TiddlyWiki5"
   comment: "Grammar for TiddlyWiki5 tiddler fields description files"
@@ -48,6 +50,9 @@ grammar =
       patterns: [
         {
           include: "#codeblock"
+        }
+        {
+          include: "#heading"
         }
         {
           include: "#horizrule"
@@ -179,8 +184,47 @@ grammar =
           contentName: "markup.raw.tw5"
         }
       ]
+    heading:
+      patterns: [
+        {
+          begin: "^\\s*(!{#{i}})(#{classesRegex})?\\s*"
+          end: "$"
+          name: "markup.heading.#{i}.tw5"
+          beginCaptures:
+            1:
+              name: "punctuation.definition.heading.markup.tw5"
+            2:
+              patterns: [
+                {
+                  include: "#classes"
+                }
+              ]
+          patterns: [
+            {
+              include: "#inline"
+            }
+          ]
+        } for i in [6..1]...
+      ]
     horizrule:
       match: "^\\s*-{3,}$"
       name: "meta.separator.hr.tw5"
+
+    # From WikiParser::parseClasses()
+    classes:
+      match: classesRegex
+      name: "meta.support.classes.tw5"
+      captures:
+        0:
+          patterns: [
+            {
+              match: "(\\.([^\\s\\.]+))"
+              captures:
+                1:
+                  name: "entity.other.attribute-name.class.css"
+                2:
+                  name: "punctuation.definition.entity.css"
+            }
+          ]
 
 module.exports = grammar

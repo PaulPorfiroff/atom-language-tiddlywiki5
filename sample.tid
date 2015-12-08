@@ -4,6 +4,27 @@
 \rules only table
 \rules only html dash entity
 
+! Heading 1
+!! Heading 2
+!!! Heading 3
+!!!! Heading 4
+!!!!! Heading 5
+!!!!!! Heading 6
+!.class1.class2 ''Heading'' //1//
+!!.class1.class2 ''Heading'' //2//
+!!!.class1.class2 ''Heading'' //3//
+!!!!.class1.class2 ''Heading'' //4//
+!!!!!.class1.class2 ''Heading'' //5//
+!!!!!!.class1.class2 ''Heading'' //6//
+!.class1.class2. ''Heading'' //1//
+!.''Heading'' //1//
+!. ''Heading'' //1//
+!''Heading'' //1//
+! ''Heading'' //1//
+!.class1.class2 """Multiline
+''heading''
+""" //1//
+
 * ''bold''
 * //italic//
 * __underscore__
