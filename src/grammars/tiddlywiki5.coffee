@@ -28,37 +28,15 @@ grammar =
           include: "text.html.basic"
         }
       ]
+
+#
+# Section: Wiki text pragma rules
+#
+
     pragma:
       patterns: [
         {
           include: "#rules"
-        }
-      ]
-    inline:
-      patterns: [
-        {
-          include: "#emphasis"
-        }
-        {
-          include: "#codeinline"
-        }
-        {
-          include: "#hardlinebreaks"
-        }
-      ]
-    block:
-      patterns: [
-        {
-          include: "#codeblock"
-        }
-        {
-          include: "#typedblock"
-        }
-        {
-          include: "#heading"
-        }
-        {
-          include: "#horizrule"
         }
       ]
 
@@ -80,54 +58,23 @@ grammar =
             }
           ]
 
-    emphasis:
-      patterns:
-        {
-          begin: mark
-          end: mark
-          contentName: "#{name}.markup.tw5"
-          beginCaptures:
-            0:
-              name: "#{name}.punctuation.definition.markup.begin.tw5"
-          endCaptures:
-            0:
-              name: "#{name}.punctuation.definition.markup.end.tw5"
-          patterns: [
-            {
-              include: "#inline"
-            }
-          ]
-        } for mark, name of {
-          "''": "bold"
-          "//": "italic"
-          "__": "underscore"
-          "\\^\\^": "superscript"
-          ",,": "subscript"
-          "~~": "strikethrough"
-        }
-    codeinline:
-      begin: "``?"
-      end: "\\0"
-      contentName: "markup.raw.tw5"
-      beginCaptures:
-        0:
-          name: "punctuation.definition.raw.markup.begin.tw5"
-      endCaptures:
-        0:
-          name: "punctuation.definition.raw.markup.end.tw5"
-    hardlinebreaks:
-      begin: "\"\"\""
-      end: "\\0"
-      contentName: "markup.other.paragraph.tw5"
-      beginCaptures:
-        0:
-          name: "punctuation.definition.paragraph.markup.begin.tw5"
-      endCaptures:
-        0:
-          name: "punctuation.definition.paragraph.markup.end.tw5"
+#
+# Section: Wiki text block rules
+#
+
+    block:
       patterns: [
         {
-          include: "#inline"
+          include: "#codeblock"
+        }
+        {
+          include: "#typedblock"
+        }
+        {
+          include: "#heading"
+        }
+        {
+          include: "#horizrule"
         }
       ]
 
@@ -265,6 +212,78 @@ grammar =
     horizrule:
       match: "^\\s*-{3,}$"
       name: "meta.separator.hr.tw5"
+
+#
+# Section: Wiki text inline rules
+#
+
+    inline:
+      patterns: [
+        {
+          include: "#emphasis"
+        }
+        {
+          include: "#codeinline"
+        }
+        {
+          include: "#hardlinebreaks"
+        }
+      ]
+
+    emphasis:
+      patterns:
+        {
+          begin: mark
+          end: mark
+          contentName: "#{name}.markup.tw5"
+          beginCaptures:
+            0:
+              name: "#{name}.punctuation.definition.markup.begin.tw5"
+          endCaptures:
+            0:
+              name: "#{name}.punctuation.definition.markup.end.tw5"
+          patterns: [
+            {
+              include: "#inline"
+            }
+          ]
+        } for mark, name of {
+          "''": "bold"
+          "//": "italic"
+          "__": "underscore"
+          "\\^\\^": "superscript"
+          ",,": "subscript"
+          "~~": "strikethrough"
+        }
+    codeinline:
+      begin: "``?"
+      end: "\\0"
+      contentName: "markup.raw.tw5"
+      beginCaptures:
+        0:
+          name: "punctuation.definition.raw.markup.begin.tw5"
+      endCaptures:
+        0:
+          name: "punctuation.definition.raw.markup.end.tw5"
+    hardlinebreaks:
+      begin: "\"\"\""
+      end: "\\0"
+      contentName: "markup.other.paragraph.tw5"
+      beginCaptures:
+        0:
+          name: "punctuation.definition.paragraph.markup.begin.tw5"
+      endCaptures:
+        0:
+          name: "punctuation.definition.paragraph.markup.end.tw5"
+      patterns: [
+        {
+          include: "#inline"
+        }
+      ]
+
+#
+# Section: Shared helper rules
+#
 
     # From WikiParser::parseClasses()
     classes:
