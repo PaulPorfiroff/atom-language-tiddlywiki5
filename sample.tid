@@ -61,6 +61,16 @@
 * `raw``raw`not raw
 * ``raw` `raw``not raw
 
+* @@@@
+* @@''Inline styling''@@
+* @@.class1.class2 ''Inline styling''@@
+* @@color:blue;background-color:red; ''Inline styling''@@
+* @@color:blue;background-color:red;''Inline styling''@@
+* @@color:blue;background-color:red;.class1.class2 ''Inline styling''@@
+* @@color:blue;background-color:red;.class1.class2 """
+''Inline styling''
+wraps inline run""" into `HTMLSpanElement` @@
+
 ```
 Raw block
 ```

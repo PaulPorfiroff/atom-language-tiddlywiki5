@@ -1,4 +1,5 @@
 classesRegex = "(?:\\.[^\\s\\.]+)+"
+stylesRegex = "(?:[^\\s]+?\\:.+?;)+"
 
 grammar =
   name: "TiddlyWiki5"
@@ -258,6 +259,9 @@ grammar =
           include: "#codeinline"
         }
         {
+          include: "#styleinline"
+        }
+        {
           include: "#hardlinebreaks"
         }
       ]
@@ -297,6 +301,33 @@ grammar =
       endCaptures:
         0:
           name: "punctuation.definition.raw.markup.end.tw5"
+    styleinline:
+      begin: "(@@)(#{stylesRegex})?(#{classesRegex})?"
+      end: "(@@)"
+      name: "markup.other.style.tw5"
+      beginCaptures:
+        1:
+          name: "punctuation.definition.style.markup.begin.tw5"
+        2:
+          patterns: [
+            {
+              include: "#styles"
+            }
+          ]
+        3:
+          patterns: [
+            {
+              include: "#classes"
+            }
+          ]
+      endCaptures:
+        1:
+          name: "punctuation.definition.style.markup.end.tw5"
+      patterns: [
+        {
+          include: "#inline"
+        }
+      ]
     hardlinebreaks:
       begin: "\"\"\""
       end: "\\0"
@@ -331,6 +362,28 @@ grammar =
                   name: "entity.other.attribute-name.class.css"
                 2:
                   name: "punctuation.definition.entity.css"
+            }
+          ]
+    styles:
+      match: stylesRegex
+      name: "meta.support.styles.tw5"
+      captures:
+        0:
+          patterns: [
+            {
+              match: "([^\\s]+?)(\\:)(.+?)(;)"
+              name: "meta.property-value.css"
+              captures:
+                1:
+                  name: "support.type.property-name.css"
+                2:
+                  name: "punctuation.separator.key-value.css"
+                3:
+                  patterns: [
+                    include: "source.css#property-values"
+                  ]
+                4:
+                  name: "punctuation.terminator.rule.css"
             }
           ]
 
