@@ -1,4 +1,4 @@
-classesRegex = "(?:\\.(?:[^\\s\\.]+))+"
+classesRegex = "(?:\\.[^\\s\\.]+)+"
 
 grammar =
   name: "TiddlyWiki5"
