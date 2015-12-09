@@ -25,6 +25,20 @@
 ''heading''
 """ //1//
 
+# ''Number'' //1//
+#* ''Bullet'' //2//
+#*; ''term''
+#*: ''description''
+#> ''quote''
+#.class1.class2 ''Number'' //1//
+ #*.class1.class2 ''Bullet'' //2//
+  #*;.class1.class2 """
+  multiline
+  ''term''
+  """
+ #*:.class1.class2 ''description''
+#>.class1.class2 ''quote''
+
 * ''bold''
 * //italic//
 * __underscore__

@@ -71,6 +71,9 @@ grammar =
           include: "#typedblock"
         }
         {
+          include: "#list"
+        }
+        {
           include: "#heading"
         }
         {
@@ -186,6 +189,35 @@ grammar =
             3:
               name: "entity.other.attribute-name.render.tw5"
         }
+      ]
+    # @IDEA: Maybe do recursive parsing of lists?
+    list:
+      patterns: [
+        {
+          begin: "^\\s*([\\*#;:>]*#{type}(?![\\*#;:>]))(#{classesRegex})?"
+          end: "$"
+          name: "#{scope}.markup.list.tw5"
+          captures:
+            1:
+              name: "#{scope}.punctuation.definition.list.markup.tw5"
+            2:
+              patterns: [
+                {
+                  include: "#classes"
+                }
+              ]
+          patterns: [
+            {
+              include: "#inline"
+            }
+          ]
+        } for type, scope of {
+          "\\*": "unnumbered.unordered.ul.li"
+          "#": "numbered.ordered.ol.li"
+          ";": "unnumbered.term.dl.dt"
+          ":": "unnumbered.description.dl.dd"
+          ">": "unnumbered.blockquote.quote"
+        }...
       ]
     heading:
       patterns: [
