@@ -190,7 +190,7 @@ grammar =
     heading:
       patterns: [
         {
-          begin: "^\\s*(!{#{i}})(#{classesRegex})?\\s*"
+          begin: "^\\s*(!{#{i}})(#{classesRegex})?"
           end: "$"
           name: "markup.heading.#{i}.tw5"
           beginCaptures:
