@@ -80,6 +80,19 @@ grammar =
         {
           include: "#horizrule"
         }
+        {
+          # @NOTE:
+          # WikiParser::parseBlock() defaults to paragraph node,
+          # if no block rule matches at current position.
+          begin: "^(?!\\s*$)"
+          end: "^$"
+          name: "meta.paragraph.tw5"
+          patterns: [
+            {
+              include: "#inline"
+            }
+          ]
+        }
       ]
 
     codeblock:

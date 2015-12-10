@@ -126,3 +126,20 @@ not here
 --- 
 ---mdash here, not hr
 mdash here, not hr---
+
+Only blocks and pragmas may be placed at the top level.
+If there are no matching block rules, then things are parsed inline and become wrapped in `HTMLParagraphElement`.
+
+Paragraphs last until two consecutive EOL are met.
+ ''still paragraph''
+   
+   
+"""
+still
+
+paragraph
+"""
+* List? No, inlines only here... in paragraph
+* Not yet
+
+The previous paragraph is done, say hi to the new one.
