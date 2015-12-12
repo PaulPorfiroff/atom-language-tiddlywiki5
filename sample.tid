@@ -61,6 +61,53 @@
 * `raw``raw`not raw
 * ``raw` `raw``not raw
 
+* http://tiddlywiki.com/
+* ~http://tiddlywiki.com/
+
+* $:/core/modules/parsers/wikiparser/rules/syslink.js
+* ~$:/core/modules/parsers/wikiparser/rules/syslink.js
+
+* WikiLink
+* ~NotWikiLink
+* notWikiLink
+* ~notWikiLink
+
+* [[Anything is a link here]]
+* [[http://tiddlywiki.com]]
+* [[~http://tiddlywiki.com]]
+* [[ ~http://tiddlywiki.com ]]
+* [[WikiLink]]
+* [[~WikiLink]]
+* [[  Wiki Link  ]]
+* [[$:/syslink]]
+* [[~$:/syslink]]
+* [[ ~$:/syslink ]]
+* [[http://tiddlywiki.com IsStill $:/wiki/link]]
+* [[ ]]
+* [[]]
+* [[Link title|Anything is a link here]]
+* [[ Link title | ~http://tiddlywiki.com ]]
+* [[ Link title |  Wiki Link  ]]
+* [[ Link title | ~$:/syslink ]]
+* [[ Link title |http://tiddlywiki.com IsStill $:/wiki/link]]
+* [[ | ]]
+* [[|]]
+
+* [ext[Anything is an external link here]]
+* [ext[http://tiddlywiki.com]]
+* [ext[ http://tiddlywiki.com ]]
+* [ext[ ~http://tiddlywiki.com ]]
+* [ext[ ]]
+* [ext[]]
+* [ext[Link title| Anything is an external link here ]]
+* [ext[ Link title |http://tiddlywiki.com]]
+* [ext[ Link title | http://tiddlywiki.com ]]
+* [ext[ Link title | ~http://tiddlywiki.com ]]
+* [ext[ |http://tiddlywiki.com]]
+* [ext[| http://tiddlywiki.com ]]
+* [ext[ | ]]
+* [ext[|]]
+
 * @@@@
 * @@''Inline styling''@@
 * @@.class1.class2 ''Inline styling''@@

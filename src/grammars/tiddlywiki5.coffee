@@ -1,5 +1,15 @@
-classesRegex = "(?:\\.[^\\s\\.]+)+"
-stylesRegex = "(?:[^\\s]+?\\:.+?;)+"
+regexes = new ->
+  @classes = "(?:\\.[^\\s\\.]+)+"
+  @styles = "(?:[^\\s]+?\\:.+?;)+"
+  @schemes = "file|http|https|mailto|ftp|irc|news|data|skype"
+
+  # From $:/core/modules/config.js
+  @lowerLetter = "[a-zß-öø-ÿőű]"
+  @upperLetter = "[A-ZÀ-ÖØ-ÞŐŰ]"
+  @anyLetter = "(?:#{@lowerLetter})|(?:#{@upperLetter})"
+  @blockPrefixLetters = "(?:#{@anyLetter})|\\-|_"
+  @unWikiLink = "~"
+  @wikiLink = "(?:#{@upperLetter})+(?:#{@lowerLetter})+(?:#{@upperLetter})(?:#{@anyLetter})*"
 
 grammar =
   name: "TiddlyWiki5"
@@ -208,7 +218,7 @@ grammar =
     list:
       patterns: [
         {
-          begin: "^\\s*([\\*#;:>]*#{type}(?![\\*#;:>]))(#{classesRegex})?"
+          begin: "^\\s*([\\*#;:>]*#{type}(?![\\*#;:>]))(#{regexes.classes})?"
           end: "$"
           name: "#{scope}.markup.list.tw5"
           captures:
@@ -236,7 +246,7 @@ grammar =
     heading:
       patterns: [
         {
-          begin: "^\\s*(!{#{i}})(#{classesRegex})?"
+          begin: "^\\s*(!{#{i}})(#{regexes.classes})?"
           end: "$"
           name: "markup.heading.#{i}.tw5"
           beginCaptures:
@@ -277,6 +287,9 @@ grammar =
         {
           include: "#hardlinebreaks"
         }
+        {
+          include: "#link"
+        }
       ]
 
     emphasis:
@@ -315,7 +328,7 @@ grammar =
         0:
           name: "punctuation.definition.raw.markup.end.tw5"
     styleinline:
-      begin: "(@@)(#{stylesRegex})?(#{classesRegex})?"
+      begin: "(@@)(#{regexes.styles})?(#{regexes.classes})?"
       end: "(@@)"
       name: "markup.other.style.tw5"
       beginCaptures:
@@ -357,13 +370,127 @@ grammar =
         }
       ]
 
+    link:
+      patterns: [
+        {
+          include: "#prettyextlink"
+        }
+        {
+          include: "#prettylink"
+        }
+        {
+          include: "#extlink"
+        }
+        {
+          include: "#syslink"
+        }
+        {
+          include: "#wikilink"
+        }
+      ]
+
+    # @IDEA:
+    # Test beforehand, whether URI part of the link is extlink/syslink/wikilink,
+    # and style it explicitly? Or just include all those rules at once?
+    prettyextlink:
+      # @HACK:
+      # Parse only single line links here, because can't distinguish `[ext[<URL>]]` and `[ext[<Text>|<URL>]]` beforehand
+      # on multiple lines (no backtracking for `begin`/`end` rules).
+      match: "(\\[(ext)\\[)(.*?)(\\]\\])"
+      name: "meta.link.external.tw5"
+      captures:
+        1:
+          name: "punctuation.definition.link.external.begin.tw5"
+        2:
+          name: "keyword.other.ext.definition.link.tw5"
+        3:
+          patterns: [
+            {
+              comment: "Parse links like [ext[<Link title>|<URI>]]"
+              # @IDEA: Wipe whitespaces for inner scopes?
+              match: "^((.*?))(\\|)((.*?))$"
+              captures:
+                1:
+                  name: "entity.other.title.link.tw5"
+                2:
+                  name: "string.other.title.link.tw5"
+                3:
+                  name: "punctuation.definition.link.title.tw5"
+                4:
+                  name: "entity.other.link.tw5"
+                5:
+                  name: "markup.underline.link.external.tw5"
+            }
+            {
+              comment: "Parse links like [ext[<URI>]]"
+              match: "^.*$"
+              name: "entity.other.link.tw5"
+              captures:
+                0:
+                  name: "markup.underline.link.external.tw5"
+            }
+          ]
+        4:
+          name: "punctuation.definition.link.external.end.tw5"
+    prettylink:
+      match: "(\\[\\[)(.*?)(\\]\\])"
+      name: "meta.link.tw5"
+      captures:
+        1:
+          name: "punctuation.definition.link.begin.tw5"
+        2:
+          patterns: [
+            {
+              comment: "Parse links like [[<Link title>|<URI>]]"
+              match: "^((.*?))(\\|)((.*?))$"
+              captures:
+                1:
+                  name: "entity.other.title.link.tw5"
+                2:
+                  name: "string.other.title.link.tw5"
+                3:
+                  name: "punctuation.definition.link.title.tw5"
+                4:
+                  name: "entity.other.link.tw5"
+                5:
+                  name: "markup.underline.link.tw5"
+            }
+            {
+              comment: "Parse links like [[<URI>]]"
+              match: "^.*$"
+              name: "entity.other.link.tw5"
+              captures:
+                0:
+                  name: "markup.underline.link.tw5"
+            }
+          ]
+        3:
+          name: "punctuation.definition.link.end.tw5"
+
+    # @IDEA: Maybe add scoping for __explicitly__ suppressed links (preceeded by `~` by default)?
+    extlink:
+      # @NOTE:
+      # Atom's builtin `language-hyperlink` grammar injects itself to `text` scope,
+      # so without cancelling its rules out, links, preceeded by `~`, will be parsed by that grammar.
+      match: "(?<!#{regexes.unWikiLink})(#{regexes.schemes}):[^\\s<>{}\\[\\]`|'\"\\\\^~]+"
+      name: "markup.underline.link.external.$1.tw5"
+    syslink:
+      match: "(?<!#{regexes.unWikiLink})(\\$:\\/)[\\w\\/\\.\\-]+"
+      captures:
+        1:
+          name: "punctuation.definition.link.wiki-link.syslink.tw5"
+      name: "markup.underline.link.wiki-link.syslink.tw5"
+    wikilink:
+      match: "(?<!#{regexes.unWikiLink})(?<!#{regexes.blockPrefixLetters})(?:#{regexes.wikiLink})"
+      name: "markup.underline.link.wiki-link.tw5"
+
 #
 # Section: Shared helper rules
 #
 
     # From WikiParser::parseClasses()
     classes:
-      match: classesRegex
+      match: regexes.classes
       name: "meta.support.classes.tw5"
       captures:
         0:
@@ -378,7 +505,7 @@ grammar =
             }
           ]
     styles:
-      match: stylesRegex
+      match: regexes.styles
       name: "meta.support.styles.tw5"
       captures:
         0:
