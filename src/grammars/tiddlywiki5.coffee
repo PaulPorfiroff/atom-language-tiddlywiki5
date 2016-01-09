@@ -93,6 +93,9 @@ grammar =
           include: "#typedblock"
         }
         {
+          include: "#quoteblock"
+        }
+        {
           include: "#list"
         }
         {
@@ -211,6 +214,82 @@ grammar =
             3:
               name: "entity.other.attribute-name.render.tw5"
         }
+      ]
+    quoteblock:
+      # @HACK:
+      # __Goals__:
+      # * Allow using 1 EOL for paragraphs at the end of `quoteblock`.
+      # * Allow using __multiline__ inline elements in cites (like """...""").
+      #
+      # __Problem__:
+      # New nesting level of the `quoteblock` begins with marker matching `<<<+`
+      # pattern. For the goals above need nested `patterns`/additional rules.
+      # Nested rules cannot back reference captured groups from parent rule, so
+      # no way to detect the exact matched begin/end marker of `quoteblock`
+      # definition (which is only known at parse time).
+      #
+      # __Solution__:
+      # Using a set of predefined begin markers and splitting into multiple
+      # rules seems to be an acceptable workaround.
+      patterns: [
+        {
+          applyEndPatternLast: 1
+          # If empty top cite given, eat EOL to go to new line and skip top cite
+          # rule.
+          begin: "^\\s*(#{detector})(?!<)(?:\\r?\\n)?"
+          end: "$"
+          name: "markup.quote.blockquote.tw5"
+          beginCaptures:
+            1:
+              name: "punctuation.definition.markup.quote.blockquote.begin.tw5"
+          patterns: [
+            {
+              comment: "Tokenize classes and top cite."
+              # Don't let top cite detector match after empty bottom cite rule
+              # has matched. Explicitly check for no EOL ahead.
+              begin: "(?<=#{detector})(?!$)(#{regexes.classes})?[^\\S\\n]*"
+              end: "\\r?\\n"
+              contentName: "meta.quote.blockquote.cite.top.tw5"
+              beginCaptures:
+                1:
+                  patterns: [
+                    {
+                      include: "#classes"
+                    }
+                  ]
+              patterns: [
+                {
+                  include: "#inline"
+                }
+              ]
+            }
+            {
+              comment: "Tokenize bottom cite."
+              begin: "^(#{detector})(?!<)[^\\S\\n]*?"
+              end: "$"
+              contentName: "meta.quote.blockquote.cite.bottom.tw5"
+              beginCaptures:
+                1:
+                  name: "punctuation.definition.markup.quote.blockquote.end.tw5"
+              patterns: [
+                {
+                  include: "#inline"
+                }
+              ]
+            }
+            {
+              comment: "Tokenize body."
+              begin: "^"
+              end: "^(?=#{detector}(?!<))"
+              patterns: [
+                {
+                  include: "#block"
+                }
+                makeFallbackBlockRule("^(?=#{detector}(?!<))")
+              ]
+            }
+          ]
+        } for detector in ["<<<<<", "<<<<", "<<<"]...
       ]
     # @IDEA: Maybe do recursive parsing of lists?
     list:

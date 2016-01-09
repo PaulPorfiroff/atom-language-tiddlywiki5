@@ -118,6 +118,55 @@
 ''Inline styling''
 wraps inline run""" into `HTMLSpanElement` @@
 
+<<<
+Quoted text
+<<<
+
+<<< Top cite
+Quoted text
+<<< Bottom cite
+
+<<< Top cite
+Quoted text
+<<<
+
+<<<
+Quoted text
+<<< Bottom cite
+
+<<<.class1.class2 Top cite
+Quoted text
+<<< Bottom cite
+
+<<<.class1.class2 """
+''Inline'' run
+for the top cite
+"""
+''Block'' run for the quote body
+
+<<<< Nested top cite
+Nested quotation
+<<<< Nested bottom cite
+
+<<< """
+''Inline'' run
+for the bottom cite
+"""
+
+<<<
+
+<<<
+
+<<<
+<<<
+
+   <<<<<
+  <<<<
+ <<<
+<<<
+<<<<
+<<<<<
+
 ```
 Raw block
 ```
