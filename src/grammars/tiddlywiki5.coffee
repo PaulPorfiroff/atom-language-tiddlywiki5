@@ -11,6 +11,19 @@ regexes = new ->
   @unWikiLink = "~"
   @wikiLink = "(?:#{@upperLetter})+(?:#{@lowerLetter})+(?:#{@upperLetter})(?:#{@anyLetter})*"
 
+# @NOTE:
+# WikiParser::parseBlock() defaults to paragraph node, if no block rule matches
+# at current position.
+makeFallbackBlockRule = (endRegEx) ->
+  begin: "^(?!\\s*$)"
+  end: if endRegEx then "(?:#{endRegEx})|^$" else "^$"
+  name: "markup.other.paragraph.tw5"
+  patterns: [
+    {
+      include: "#inline"
+    }
+  ]
+
 grammar =
   name: "TiddlyWiki5"
   comment: "Grammar for TiddlyWiki5 tiddler fields description files"
@@ -32,9 +45,7 @@ grammar =
         {
           include: "#block"
         }
-        {
-          include: "#inline"
-        }
+        makeFallbackBlockRule()
         {
           include: "text.html.basic"
         }
@@ -89,19 +100,6 @@ grammar =
         }
         {
           include: "#horizrule"
-        }
-        {
-          # @NOTE:
-          # WikiParser::parseBlock() defaults to paragraph node,
-          # if no block rule matches at current position.
-          begin: "^(?!\\s*$)"
-          end: "^$"
-          name: "meta.paragraph.tw5"
-          patterns: [
-            {
-              include: "#inline"
-            }
-          ]
         }
       ]
 
