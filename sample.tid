@@ -118,6 +118,78 @@
 ''Inline styling''
 wraps inline run""" into `HTMLSpanElement` @@
 
+@@
+
+@@
+
+@@color:blue;background-color:red;
+
+@@
+
+@@.class1.class2
+
+@@
+
+@@color:blue;
+@@background-color:red;
+@@.class1.class2
+
+@@
+
+@@color:blue;
+@@background-color:red;
+@@.class1.class2
+Paragraph
+@@
+
+@@color:blue;
+@@background-color:red;
+@@.class1.class2
+    @@
+
+@@
+@@
+
+@@color:blue;
+@@background-color:red;
+@@.class1.class2
+One paragraph here
+    @@
+
+@@
+@@
+
+@@color:blue;
+@@background-color:red;
+@@.class1.class2
+
+Each individual block run here gets styles and classes specified, so no wrapping HTML element is needed.
+
+* This list should have red background
+* This text should be blue
+
+  @@color:blue;
+@@background-color:red;
+@@.class1.class2
+Yep, looks ugly, but that's a possibility to nest `styleblocks`.
+@@* In TW5 wikitext it's legal to start any block definition here,
+* but currently this possibility is ignored and marked as illegal by this grammar.
+
+  @@background-color:blue;Yep, same ugliness to have a paragraph starting with `styleinline`.@@
+
+@@
+
+@@background-color:blue;
+Here's a ''paragraph'' with inline styling.
+@@
+''Another'' paragraph without styling.
+
+@@background-color:blue; 
+Here's a ''paragraph'' with inline styling.
+@@
+@@background-color:blue;''Same'' paragraph with inline styling.@@
+''Same'' paragraph without styling.
+
 <<<
 Quoted text
 <<<

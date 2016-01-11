@@ -93,6 +93,9 @@ grammar =
           include: "#typedblock"
         }
         {
+          include: "#styleblock"
+        }
+        {
           include: "#quoteblock"
         }
         {
@@ -213,6 +216,66 @@ grammar =
               name: "punctuation.definition.typedblock.render.tw5"
             3:
               name: "entity.other.attribute-name.render.tw5"
+        }
+      ]
+    styleblock:
+      applyEndPatternLast: 1
+      # @NOTE:
+      # The only difference between `styleinline` and `styleblock` detectors is
+      # mandatory EOL for the latter, so can't reduce the `begin` regex.
+      begin: "^\\s*(?=@@(#{regexes.styles})?(#{regexes.classes})?$)"
+      end: "(?<=^@@)\\s*(.*)$"
+      contentName: "markup.other.style.styleblock.tw5"
+      endCaptures:
+        # @HACK:
+        # __Problem__:
+        # TW5's `styleblock` rule end detector allows writing new block
+        # definitions starting on the same line, where the end marker is. Currently
+        # this breaks `block` rule detectors in this grammar.
+        #
+        # __Solution__:
+        # As this behaviour is inconsistent with other block rules and likely
+        # to be not desired, just drop it for now and provide some feedback.
+        # Welp, or just modify block rules up.
+        1:
+          name: "invalid.illegal.tw5"
+      patterns: [
+        {
+          comment: "Tokenize markers, styles and classes."
+          match: "(?:^|\\G)(@@)(#{regexes.styles})?(#{regexes.classes})?\\r?\\n"
+          name: "meta.styleblock.definition.begin.top.tw5"
+          captures:
+            1:
+              name: "punctuation.definition.markup.other.style.styleblock.begin.tw5"
+            2:
+              patterns: [
+                {
+                  include: "#styles"
+                }
+              ]
+            3:
+              patterns: [
+                {
+                  include: "#classes"
+                }
+              ]
+        }
+        {
+          comment: "Tokenize body and end marker."
+          begin: "^"
+          end: "^(@@)"
+          contentName: "meta.styleblock.definition.body.tw5"
+          endCaptures:
+            0:
+              name: "meta.styleblock.definition.end.bottom.tw5"
+            1:
+              name: "punctuation.definition.markup.other.style.styleblock.end.tw5"
+          patterns: [
+            {
+              include: "#block"
+            }
+            makeFallbackBlockRule("^(?=@@)")
+          ]
         }
       ]
     quoteblock:
