@@ -118,6 +118,57 @@
 ''Inline styling''
 wraps inline run""" into `HTMLSpanElement` @@
 
+{{}}
+{{ }}
+{{title}}
+{{title!!field}}
+{{title##index}}
+{{||templateTitle}}
+{{title||templateTitle}}
+{{title!!field || templateTitle}}
+{{title##index || templateTitle}}
+{{ long title !! long !! field || long template title}}
+{{
+}}
+{{
+  title  
+}}
+{{
+  title!!field  
+}}
+{{
+  title##index  
+}}
+{{
+  ||templateTitle
+}}
+{{||templateTitle
+}}
+{{
+  title||templateTitle 
+}}
+{{title!!field || templateTitle}}
+{{title##index || templateTitle}}
+{{ long title !! long !! field || long template title}}
+{{
+  long title !! long !! field
+  ||
+  long template title
+}}
+{{
+
+  multiline text reference
+
+  is illegal
+
+  ||
+
+  multiline template title is not
+
+  but don't use it here anyway
+
+}}
+
 @@
 
 @@

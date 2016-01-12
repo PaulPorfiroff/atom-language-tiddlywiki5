@@ -99,6 +99,9 @@ grammar =
           include: "#quoteblock"
         }
         {
+          include: "#transcludeblock"
+        }
+        {
           include: "#list"
         }
         {
@@ -353,6 +356,83 @@ grammar =
             }
           ]
         } for detector in ["<<<<<", "<<<<", "<<<"]...
+      ]
+    transcludeblock:
+      # @HACK:
+      # * No fallback to paragraph when illegal characters met.
+      # * No illegal character feedback.
+      # @NOTE:
+      # * For each placeholder whitespaces are trimmed, as in TW5 rule.
+      # * Multiline text references and tiddler titles get marked illegal.
+      # * If `||` is given, then template title is expected.
+      begin: "^\\s*(\\{\\{)"
+      end: "(\\}\\})\\r?\\n"
+      name: "meta.transclusion.transcludeblock.tw5"
+      beginCaptures:
+        1:
+          name: "punctuation.definition.transclusion.transcludeblock.begin.tw5"
+      endCaptures:
+        1:
+          name: "punctuation.definition.transclusion.transcludeblock.end.tw5"
+      patterns: [
+        {
+          comment: "Tokenize template tiddler title."
+          begin: "(\\|\\|)"
+          end: "(?=\\}\\})"
+          beginCaptures:
+            1:
+              name: "punctuation.definition.transclusion.transcludeblock.template.tw5"
+          patterns: [
+            {
+              # Let a trimmed portion of the nearest line containing
+              # non-whitespace char be a template tiddler title.
+              comment: "Treat nearest non-whitespace line as template tiddler title."
+              begin: "(?<=\\|\\|)\\G"
+              end: "(\\S.*?)\\s*(?=$|\\}\\})"
+              endCaptures:
+                1:
+                  name: "entity.other.name.tiddler.title.template.tw5"
+            }
+            {
+              # If another non-whitespace character occurs below, start marking
+              # things illegal.
+              begin: "(?=\\S)"
+              end: "(?=\\}\\})"
+              name: "invalid.illegal.multiline-tiddler-title.tw5"
+            }
+          ]
+        }
+        {
+          comment: "Tokenize text reference."
+          begin: "(?<=\\{\\{)\\G"
+          end: "(?=\\}\\}|\\|\\|)"
+          patterns: [
+            {
+              # Detect and eat non-empty portion of the first line of text
+              # reference if present.
+              begin: "(?<=\\{\\{)\\G"
+              end: """(?x)
+              (?= \\}\\} | \\|\\|) | # Allow dropping text reference
+              (\\S.*?)\\s* (?= $ | \\}\\} | \\|\\|)
+              """
+              endCaptures:
+                1:
+                  name: "string.other.text-reference.tw5"
+                  patterns: [
+                    {
+                      include: "textReference"
+                    }
+                  ]
+            }
+            {
+              # If another non-whitespace character occurs below, start marking
+              # things illegal.
+              begin: "(?=\\S)"
+              end: "(?=\\|\\||\\}\\})"
+              name: "invalid.illegal.multiline-text-reference.tw5"
+            }
+          ]
+        }
       ]
     # @IDEA: Maybe do recursive parsing of lists?
     list:
