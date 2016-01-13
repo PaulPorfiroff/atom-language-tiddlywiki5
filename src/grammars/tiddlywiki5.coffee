@@ -362,9 +362,9 @@ grammar =
       # * No fallback to paragraph when illegal characters met.
       # * No illegal character feedback.
       # @NOTE:
-      # * For each placeholder whitespaces are trimmed, as in TW5 rule.
-      # * Multiline text references and tiddler titles get marked illegal.
-      # * If `||` is given, then template title is expected.
+      # Only first non-empty lines of text reference and template title
+      # are used. Whitespaces get trimmed, as in TW5 rule. Other lines are
+      # marked illegal.
       begin: "^\\s*(\\{\\{)"
       end: "(\\}\\})\\r?\\n"
       name: "meta.transclusion.transcludeblock.tw5"
@@ -417,10 +417,9 @@ grammar =
               """
               endCaptures:
                 1:
-                  name: "string.other.text-reference.tw5"
                   patterns: [
                     {
-                      include: "textReference"
+                      include: "#textReference"
                     }
                   ]
             }
@@ -746,5 +745,29 @@ grammar =
                   name: "punctuation.terminator.rule.css"
             }
           ]
+    # From $tw.utils.parseTextReference()
+    # @IDEA:
+    # May improve scoping.
+    # __Options__:
+    # * Insert captured field/index name into scope name.
+    #   Fast, simple, but will lead to unexpected styling.
+    # * Use `codeblock` approach.
+    #   Will have to trim things down and apply patterns.
+    textReference:
+      match: "^(.*?)(?:(!!)(.*)|(\\#\\#)(.*))?$"
+      name: "meta.support.text-reference.tw5"
+      captures:
+        0:
+          name: "string.other.text-reference.tw5"
+        1:
+          name: "entity.other.name.tiddler.field.tiddler-field.title.tw5"
+        2:
+          name: "punctuation.definition.text-reference.field.tiddler-field.tw5"
+        3:
+          name: "entity.other.name.tiddler.field.tiddler-field.tw5"
+        4:
+          name: "punctuation.definition.text-reference.index.data-index.tiddler-index.tw5"
+        5:
+          name: "entity.other.name.tiddler.index.data-index.tiddler-index.tw5"
 
 module.exports = grammar
