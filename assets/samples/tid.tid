@@ -1,3 +1,11 @@
+# Tiddler metadata
+field:value
+ field   :  value
+  field name   : :field value: 
+  :  
+:
+ # No valid key-value pair in this line, just ignore it
+
 \rules does not amend parser rules without only or except
 \rules except rules
 \rules except bold italic heading
