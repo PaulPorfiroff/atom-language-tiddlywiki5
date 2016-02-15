@@ -505,6 +505,9 @@ grammar =
         {
           include: "#link"
         }
+        {
+          include: "#dash"
+        }
       ]
 
     emphasis:
@@ -699,6 +702,16 @@ grammar =
       match: "(?<!#{regexes.unWikiLink})(?<!#{regexes.blockPrefixLetters})(?:#{regexes.wikiLink})"
       name: "markup.underline.link.wiki-link.tw5"
 
+    dash:
+      patterns: [
+        {
+          match: "#{mark}(?!-)"
+          name: "#{scope}.markup.other.dash.tw5"
+        } for mark, scope of {
+          "--": "ndash"
+          "---": "mdash"
+        }...
+      ]
 #
 # Section: Shared helper rules
 #
