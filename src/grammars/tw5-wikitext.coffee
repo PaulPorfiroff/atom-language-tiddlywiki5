@@ -503,6 +503,9 @@ grammar =
           include: "#hardlinebreaks"
         }
         {
+          include: "#transcludeinline"
+        }
+        {
           include: "#link"
         }
         {
@@ -585,6 +588,77 @@ grammar =
       patterns: [
         {
           include: "#inline"
+        }
+      ]
+    transcludeinline:
+      # @NOTE:
+      # Mostly copypaste of `transcludeblock` rule.
+      begin: "(\\{\\{)"
+      end: "(\\}\\})"
+      name: "meta.transclusion.transcludeinline.tw5"
+      beginCaptures:
+        1:
+          name: "punctuation.definition.transclusion.transcludeinline.begin.tw5"
+      endCaptures:
+        1:
+          name: "punctuation.definition.transclusion.transcludeinline.end.tw5"
+      patterns: [
+        {
+          comment: "Tokenize template tiddler title."
+          begin: "(\\|\\|)"
+          end: "(?=\\}\\})"
+          beginCaptures:
+            1:
+              name: "punctuation.definition.transclusion.transcludeinline.template.tw5"
+          patterns: [
+            {
+              # Let a trimmed portion of the nearest line containing
+              # non-whitespace char be a template tiddler title.
+              comment: "Treat nearest non-whitespace line as template tiddler title."
+              begin: "(?<=\\|\\|)\\G"
+              end: "(\\S.*?)\\s*(?=$|\\}\\})"
+              endCaptures:
+                1:
+                  name: "entity.other.name.tiddler.title.template.tw5"
+            }
+            {
+              # If another non-whitespace character occurs below, start marking
+              # things illegal.
+              begin: "(?=\\S)"
+              end: "(?=\\}\\})"
+              name: "invalid.illegal.multiline-tiddler-title.tw5"
+            }
+          ]
+        }
+        {
+          comment: "Tokenize text reference."
+          begin: "(?<=\\{\\{)\\G"
+          end: "(?=\\}\\}|\\|\\|)"
+          patterns: [
+            {
+              # Detect and eat non-empty portion of the first line of text
+              # reference if present.
+              begin: "(?<=\\{\\{)\\G"
+              end: """(?x)
+              (?= \\}\\} | \\|\\|) | # Allow dropping text reference
+              (\\S.*?)\\s* (?= $ | \\}\\} | \\|\\|)
+              """
+              endCaptures:
+                1:
+                  patterns: [
+                    {
+                      include: "#textReference"
+                    }
+                  ]
+            }
+            {
+              # If another non-whitespace character occurs below, start marking
+              # things illegal.
+              begin: "(?=\\S)"
+              end: "(?=\\|\\||\\}\\})"
+              name: "invalid.illegal.multiline-text-reference.tw5"
+            }
+          ]
         }
       ]
 
