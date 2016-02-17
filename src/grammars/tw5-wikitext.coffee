@@ -98,6 +98,9 @@ grammar =
           include: "#transcludeblock"
         }
         {
+          include: "#table"
+        }
+        {
           include: "#list"
         }
         {
@@ -429,6 +432,146 @@ grammar =
           ]
         }
       ]
+
+    table:
+      patterns: [
+        {
+          match: "^(\\|)(.*)(\\|)(#{marker})$"
+          name: "markup.other.table.tw5"
+          captures:
+            0:
+              name: "#{scope}.meta.table.tw5"
+            1:
+              name: "punctuation.definition.table.pipe.outer.begin.tw5"
+            2: rule
+            3:
+              name: "punctuation.definition.table.pipe.outer.end.tw5"
+            4:
+              name: "#{scope}.markup.other.table.tw5"
+        } for marker, {scope, rule} of {
+          # Tokenize table classes.
+          "k":
+            scope: "classes"
+            rule:
+              patterns: [
+                {
+                  match: "^.*$"
+                  name: "meta.support.classes.tw5"
+                  captures:
+                    0:
+                      name: "entity.other.attribute-name.class.css"
+                }
+              ]
+          # Tokenize table caption.
+          "c":
+            scope: "caption"
+            rule:
+              patterns: [
+                {
+                  match: "^.*$"
+                  name: "entity.other.name.caption.tw5"
+                  captures:
+                    0:
+                      patterns: [
+                        {
+                          include: "#inline"
+                        }
+                      ]
+                }
+              ]
+          # Tokenize row in <thead> table section.
+          "h":
+            scope: "row.thead.header"
+            rule:
+              patterns: [
+                {
+                  include: "#tableRow"
+                }
+              ]
+          # Tokenize row in <tfoot> table section.
+          "f":
+            scope: "row.tfoot.footer"
+            rule:
+              patterns: [
+                {
+                  include: "#tableRow"
+                }
+              ]
+          # Tokenize row in <tbody> table section.
+          "":
+            scope: "row.tbody.body"
+            rule:
+              patterns: [
+                {
+                  include: "#tableRow"
+                }
+              ]
+        }...
+      ]
+    tableRow:
+      # From processRow()
+      patterns: [
+        {
+          comment: "Tokenize table cell."
+          match: "(?<!$)(.*?)(\\||$)"
+          captures:
+            1:
+              patterns: [
+                {
+                  match: "^#{type}$"
+                  name: "#{scope}.meta.cell.td.tw5"
+                  capture:
+                    0:
+                      name: "#{scope}.punctuation.definition.cell.tw5"
+                } for type, scope of {
+                  "~": "rowspan.down"
+                  ">": "colspan.right"
+                  "<": "colspan.left"
+                }...
+                # @IDEA:
+                # Append alignment and header flags to the cell scope.
+                # Will require too much rules, though.
+                {
+                  match: """(?x)
+                  ^
+                  (?:
+                    (\\^(?:[^^]|\\^\\^)) |  # Top alignment marker
+                    (\\,(?:[^,]|\\,\\,))    # Bottom alignment marker
+                  )?
+                  ([ \\t]*)                 # Left alignment marker
+                  (#{marker})               # Heading cell marker
+                  (.*?)                     # Cell contents
+                  ([ \\t]*)                 # Right alignment marker
+                  $
+                  """
+                  name: "#{scope}.meta.cell.tw5"
+                  captures:
+                    1:
+                      name: "punctuation.definition.cell.valign.top.tw5"
+                    2:
+                      name: "punctuation.definition.cell.valign.bottom.tw5"
+                    3:
+                      name: "punctuation.definition.cell.align.left.tw5"
+                    4:
+                      name: "punctuation.definition.cell.heading.th.tw5"
+                    5:
+                      patterns: [
+                        {
+                          include: "#inline"
+                        }
+                      ]
+                    6:
+                      name: "punctuation.definition.cell.align.right.tw5"
+                } for marker, scope of {
+                  "!": "heading.th"
+                  "": "data.td"
+                }...
+              ]
+            2:
+              name: "punctuation.separator.cell.pipe.inner.tw5"
+        }
+      ]
+
     # @IDEA: Maybe do recursive parsing of lists?
     list:
       patterns: [

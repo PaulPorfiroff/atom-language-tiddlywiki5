@@ -183,6 +183,50 @@ wraps inline run""" into `HTMLSpanElement` @@
 
 }}
 
+||k
+| |k
+|||k
+| Table | class | attribute |k
+
+||c
+| |c
+|||c
+| ''Table caption section'' |c
+
+||
+| |
+|||
+|td1|td2|
+|''!td1''|''!td2''|
+|!th1|!th2|
+|td1!|td2!|
+|align=left | align=center | align=right|
+|align=left   |   align=center   |   align=right|
+|^^^valign=top|,,,valign=bottom|
+|^ valign=top|, valign=bottom|
+|^t valign=top|,b valign=bottom|
+|^ valign=top, align=left |^  valign=top, align=center |^  valign=top, align=right|
+|1|2|3|4|
+| 1 |<|>| 4 |
+|^ 1|2|3|, 4|
+|~|2|3|~|
+
+||h
+| |h
+|||h
+|^ !''valign=top, align=left'' |^  !valign=top, align=center |^  !valign=top, align=right|h
+| 1 |<|>| 4 |h
+|^ 1|2|3|, 4|h
+|~|2|3|~|h
+
+||f
+| |f
+|||f
+|^ !''valign=top, align=left'' |^  !valign=top, align=center |^  !valign=top, align=right|f
+| 1 |<|>| 4 |f
+|^ 1|2|3|, 4|f
+|~|2|3|~|f
+
 {{}}
 {{ }}
 {{title}}
