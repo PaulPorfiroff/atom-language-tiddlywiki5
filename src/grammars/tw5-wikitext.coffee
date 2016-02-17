@@ -198,7 +198,7 @@ grammar =
             }
           ]
         } for parseType, scope of {
-          "\\.tid|application\\/x\\-tiddler": "#wikitext"
+          "\\.tid|application\\/x\\-tiddler": "text.html.tw5"
           "\\.css|text\\/css": "source.css"
           "\\.html?|text\\/html": "text.html.basic"
           "\\.hta|application\\/hta": "text.html.basic"
