@@ -178,6 +178,8 @@ wraps inline run""" into `HTMLSpanElement` @@
 * {{title}}
 * {{title!!field}}
 * {{title##index}}
+* {{|| }}
+* {{ || }}
 * {{||templateTitle}}
 * {{title||templateTitle}}
 * {{title!!field || templateTitle}}
@@ -193,6 +195,9 @@ wraps inline run""" into `HTMLSpanElement` @@
 }}
 * {{
   title##index  
+}}
+* {{
+  ||
 }}
 * {{
   ||templateTitle
@@ -351,6 +356,8 @@ wraps inline run""" into `HTMLSpanElement` @@
 {{title}}
 {{title!!field}}
 {{title##index}}
+{{|| }}
+{{ || }}
 {{||templateTitle}}
 {{title||templateTitle}}
 {{title!!field || templateTitle}}
@@ -366,6 +373,9 @@ wraps inline run""" into `HTMLSpanElement` @@
 }}
 {{
   title##index  
+}}
+{{
+  ||
 }}
 {{
   ||templateTitle

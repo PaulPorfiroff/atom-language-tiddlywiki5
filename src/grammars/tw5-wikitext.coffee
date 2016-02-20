@@ -442,7 +442,7 @@ grammar =
               # non-whitespace char be a template tiddler title.
               comment: "Treat nearest non-whitespace line as template tiddler title."
               begin: "(?<=\\|\\|)\\G"
-              end: "(\\S.*?)\\s*(?=$|\\}\\})"
+              end: "(?=\\S)((?:(?!\\}\\}).)*?)\\s*(?=$|\\}\\})"
               endCaptures:
                 1:
                   name: "entity.other.name.tiddler.title.template.tw5"
@@ -868,7 +868,7 @@ grammar =
               # non-whitespace char be a template tiddler title.
               comment: "Treat nearest non-whitespace line as template tiddler title."
               begin: "(?<=\\|\\|)\\G"
-              end: "(\\S.*?)\\s*(?=$|\\}\\})"
+              end: "(?=\\S)((?:(?!\\}\\}).)*?)\\s*(?=$|\\}\\})"
               endCaptures:
                 1:
                   name: "entity.other.name.tiddler.title.template.tw5"
