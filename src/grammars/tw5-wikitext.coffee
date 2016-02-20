@@ -971,6 +971,155 @@ grammar =
                   name: "punctuation.terminator.rule.css"
             }
           ]
+    # From Wiki::parseFilter()
+    # @HACK:
+    # For now use single rule and don't depend on end patterns for specific
+    # constructs using filters. So end patterns of outer constructs should be
+    # separated from filter string (especially when using unqouted title
+    # operator shortcut).
+    #
+    # E.g. those would fail:
+    #
+    # ```
+    # {{{title}}}
+    # {{{title||template}}}
+    # <$list filter="title" />
+    # ```
+    #
+    # And those won't:
+    #
+    # ```
+    # {{{title }}}
+    # {{{title ||template}}}
+    # <$list filter="title " />
+    # {{{'title'}}}
+    # {{{'title' ||template}}}
+    # <$list filter="'title'" />
+    # {{{[[title]]}}}
+    # {{{[[title]] ||template}}}
+    # <$list filter="[[title]]" />
+    # ```
+    filter:
+      patterns: [
+        {
+          # Match explicit filter operation syntax
+          comment: "Match filter operation (run)."
+          begin: "(?:(\\+)|(\\-))?(\\[)"
+          end: "(\\])"
+          name: "meta.filter.operation.run.tw5"
+          contentName: "entity.filter.operator.step.title.tw5"
+          beginCaptures:
+            1:
+              name: "keyword.operator.prefix.plus.replacement.tw5"
+            2:
+              name: "keyword.operator.prefix.minus.difference.tw5"
+            3:
+              name: "punctuation.definition.filter.operation.begin.tw5"
+          endCaptures:
+            1:
+              name: "punctuation.definition.filter.operation.end.tw5"
+          patterns: [
+            {
+              # @NOTE:
+              # It seems like duplicating this rule for each operand type is the
+              # only way to achieve the desired scoping. Otherwise no viable way
+              # to detect the end of single operator in chain of operators.
+              # @IDEA:
+              # Maybe store captured operator name/suffix in scope names.
+              # @IDEA:
+              # Process specific operands explicitly (e.g. provide regex
+              # highlighting).
+              # @HACK:
+              # For now ignore deprecated regex operand support.
+              # @HACK:
+              # Consider operator name and suffix, and operand one liner.
+              comment: "Match filter operator (step)."
+              match: "(!?)([^\\[\\{<]*?)(?:(:)([^\\[\\{<]*?))?((#{begin})(.*?)(#{end}))"
+              name: "meta.filter.operator.step.tw5"
+              captures:
+                1:
+                  name: "keyword.operator.prefix.not.negation.tw5"
+                2:
+                  name: "entity.filter.operator.step.name.tw5"
+                3:
+                  name: "punctuation.definition.filter.operator.suffix.tw5"
+                4:
+                  name: "entity.filter.operator.step.suffix.tw5"
+                5:
+                  name: "#{scope}.entity.operand.tw5"
+                6:
+                  name: "#{scope}.punctuation.definition.operand.begin.tw5"
+                # @NOTE:
+                # __Problem__:
+                # Injections doesn't seem to work within `match` rule.
+                #
+                # __Options__:
+                # * Directly include rules, ugly and strightforward
+                # * Append a `begin/`end` rule here, assign helper scope, inject
+                #
+                # __Solution__:
+                # No meaningful additional scope name to assign, so use the ugly
+                # option.
+                7: rule ? {}
+                8:
+                  name: "#{scope}.punctuation.definition.operand.end.tw5"
+            } for [begin, end, scope, rule] in [
+              ["<", ">", "variable"]
+              ["\\[", "\\]", "direct"]
+              [
+                "\\{", "\\}", "indirect", {
+                  patterns: [
+                    {
+                      include: "#textReference"
+                    }
+                  ]
+                }
+              ]
+            ]...
+          ]
+        }
+        # Define rules matching shortcuts of operation with single `title`
+        # operator.
+        {
+          begin: "(?:(\\+)|(\\-))?(?=#{mark})"
+          end: "(?<=#{mark})"
+          name: "meta.filter.operation.run.tw5"
+          contentName: "entity.filter.operator.step.title.tw5"
+          beginCaptures:
+            1:
+              name: "keyword.operator.prefix.plus.replacement.tw5"
+            2:
+              name: "keyword.operator.prefix.minus.difference.tw5"
+          patterns: [
+            {
+              include: "#string"
+            }
+          ]
+        } for mark in ["\"", "\'"]...
+        {
+          match: "(?:(\\+)|(\\-))?(\\S+)"
+          name: "meta.filter.operation.run.tw5"
+          captures:
+            1:
+              name: "keyword.operator.prefix.plus.replacement.tw5"
+            2:
+              name: "keyword.operator.prefix.minus.difference.tw5"
+            3:
+              patterns: [
+                {
+                  match: "^.*$"
+                  name: "entity.filter.operator.step.title.tw5"
+                  captures:
+                    0:
+                      patterns: [
+                        {
+                          include: "#string"
+                        }
+                      ]
+                }
+              ]
+        }
+      ]
     # From $tw.utils.parseTextReference()
     # @IDEA:
     # May improve scoping.
@@ -995,5 +1144,26 @@ grammar =
           name: "punctuation.definition.text-reference.index.data-index.tiddler-index.tw5"
         5:
           name: "entity.other.name.tiddler.index.data-index.tiddler-index.tw5"
+    string:
+      patterns: [
+        {
+          begin: mark
+          end: mark
+          name: "#{scope}.string.quoted.tw5"
+          beginCaptures:
+            0:
+              name: "#{scope}.punctuation.definition.string.begin.tw5"
+          endCaptures:
+            0:
+              name: "#{scope}.punctuation.definition.string.end.tw5"
+        } for mark, scope of {
+          "\"": "double"
+          "\'": "single"
+        }...
+        {
+          match: "\\S+"
+          name: "string.unquoted.tw5"
+        }
+      ]
 
 module.exports = grammar
