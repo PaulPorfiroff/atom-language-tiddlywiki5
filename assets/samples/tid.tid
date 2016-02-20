@@ -132,6 +132,47 @@ field:value
 ''Inline styling''
 wraps inline run""" into `HTMLSpanElement` @@
 
+* {{{}}}
+* {{{ }}}
+* {{{||}}}
+* {{{|| }}}
+* {{{ || }}}
+* {{{||templateTitle}}}
+* {{{ || templateTitle }}}
+* {{{filter }}}
+* {{{ filter }}}
+* {{{filter ||}}}
+* {{{ filter || templateTitle }}}
+* {{{
+}}}
+* {{{
+  filter
+}}}
+* {{{
+  ||
+}}}
+* {{{
+  || templateTitle
+}}}
+* {{{
+  filter
+  ||
+  templateTitle
+}}}
+* {{{
+
+  multiline filter strings
+
+  are legal
+
+  ||
+
+  multiline template titles too,
+
+  but don't use it here anyway
+
+}}}
+
 * {{}}
 * {{ }}
 * {{title}}
@@ -226,6 +267,84 @@ wraps inline run""" into `HTMLSpanElement` @@
 | 1 |<|>| 4 |f
 |^ 1|2|3|, 4|f
 |~|2|3|~|f
+
+{{{}}}
+{{{ }}}
+{{{||}}}
+{{{|| }}}
+{{{ || }}}
+{{{||templateTitle}}}
+{{{ || templateTitle }}}
+{{{filter }}}
+{{{ filter }}}
+{{{filter ||}}}
+{{{ filter || templateTitle }}}
+{{{
+}}}
+{{{
+  filter
+}}}
+{{{
+  ||
+}}}
+{{{
+  || templateTitle
+}}}
+{{{
+  filter
+  ||
+  templateTitle
+}}}
+{{{
+
+  multiline filter strings
+
+  are legal
+
+  ||
+
+  multiline template titles too,
+
+  but don't use it here anyway
+
+}}}
+{{{
+  tiddler_title
+  'tiddler title'
+  "tiddler title"
+
+  [[tiddler title]]
+  [<variable name>]
+  [{text!!reference}]
+
+  [[tiddler title]<variable name>{text!!reference}]
+  [operator1[tiddler title]operator2<variable name>operator3{text!!reference}]
+  [operator1:suffix1[tiddler title]operator2:suffix2<variable name>operator3:suffix3{text!!reference}]
+
+  [![tiddler title]!<variable name>!{text!!reference}]
+  [!operator1:suffix1[tiddler title]!operator2:suffix2<variable name>!operator3:suffix3{text!!reference}]
+
+  +
+  -
+  +-
+  -+
+  +!
+  -!
+  +!-
+  -!+
+  +tiddler_title
+  +'tiddler title'
+  +"tiddler title"
+  +[!operator1:suffix1[tiddler title]!operator2:suffix2<variable name>!operator3:suffix3{text!!reference}]
+  +[!operator1:suffix1[tiddler title]!operator2:suffix2<variable name>!operator3:suffix3{text!!reference}]
+
+  -[!:suffix1[tiddler title]!operator2:<variable name>!:{text!!reference}]
+
+  "tiddler title"tiddler_title'tiddler title'[[tiddler title]]
+  +"tiddler title"+tiddler_title+'tiddler title'+[[tiddler title]]
+  +"tiddler title"+'tiddler title'+[[tiddler title]]+tiddler_title
+}}}
+
 
 {{}}
 {{ }}

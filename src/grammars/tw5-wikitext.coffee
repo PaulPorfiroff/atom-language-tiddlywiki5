@@ -95,6 +95,9 @@ grammar =
           include: "#quoteblock"
         }
         {
+          include: "#filteredtranscludeblock"
+        }
+        {
           include: "#transcludeblock"
         }
         {
@@ -355,6 +358,58 @@ grammar =
             }
           ]
         } for detector in ["<<<<<", "<<<<", "<<<"]...
+      ]
+    filteredtranscludeblock:
+      # @HACK:
+      # For now drop detection of `tooltip`, `style` and `itemClass` parts of
+      # the rule, because the underlying `ListWidget` widget ignores them.
+      begin: "^\\s*(\\{\\{\\{)"
+      end: "(\\}\\}\\})\\r?\\n"
+      name: "meta.transclusion.filteredtranscludeblock.tw5"
+      beginCaptures:
+        1:
+          name: "punctuation.definition.transclusion.filteredtranscludeblock.begin.tw5"
+      endCaptures:
+        1:
+          name: "punctuation.definition.transclusion.filteredtranscludeblock.end.tw5"
+      patterns: [
+        {
+          comment: "Tokenize template tiddler title."
+          begin: "(\\|\\|)"
+          end: "(?=\\}\\}\\})"
+          beginCaptures:
+            1:
+              name: "punctuation.definition.transclusion.filteredtranscludeblock.template.tw5"
+          patterns: [
+            {
+              comment: "Treat nearest non-whitespace line as template tiddler title."
+              begin: "(?<=\\|\\|)\\G"
+              end: "(?=\\S)((?:(?!\\}\\}\\}).)*?)\\s*(?=$|\\}\\}\\})"
+              endCaptures:
+                1:
+                  name: "entity.other.name.tiddler.title.template.tw5"
+            }
+            {
+              # If another non-whitespace character occurs below, start marking
+              # things illegal.
+              begin: "(?=\\S)"
+              end: "(?=\\}\\}\\})"
+              name: "invalid.illegal.multiline-tiddler-title.tw5"
+            }
+          ]
+        }
+        # Tokenize filter string.
+        # makeFilterRule("(?=\\|\\||\\}\\}\\})")
+        {
+          begin: "\\G"
+          end: "(?=\\|\\||\\}\\}\\})"
+          name: "meta.filter.tw5"
+          patterns: [
+            {
+              include: "#filter"
+            }
+          ]
+        }
       ]
     transcludeblock:
       # @HACK:
@@ -646,6 +701,9 @@ grammar =
           include: "#hardlinebreaks"
         }
         {
+          include: "#filteredtranscludeinline"
+        }
+        {
           include: "#transcludeinline"
         }
         {
@@ -731,6 +789,57 @@ grammar =
       patterns: [
         {
           include: "#inline"
+        }
+      ]
+    filteredtranscludeinline:
+      # @NOTE:
+      # Copypaste of `filteredtranscludeblock`.
+      begin: "(\\{\\{\\{)"
+      end: "(\\}\\}\\})"
+      name: "meta.transclusion.filteredtranscludeblock.tw5"
+      beginCaptures:
+        1:
+          name: "punctuation.definition.transclusion.filteredtranscludeblock.begin.tw5"
+      endCaptures:
+        1:
+          name: "punctuation.definition.transclusion.filteredtranscludeblock.end.tw5"
+      patterns: [
+        {
+          comment: "Tokenize template tiddler title."
+          begin: "(\\|\\|)"
+          end: "(?=\\}\\}\\})"
+          beginCaptures:
+            1:
+              name: "punctuation.definition.transclusion.filteredtranscludeblock.template.tw5"
+          patterns: [
+            {
+              comment: "Treat nearest non-whitespace line as template tiddler title."
+              begin: "(?<=\\|\\|)\\G"
+              end: "(?=\\S)((?:(?!\\}\\}\\}).)*?)\\s*(?=$|\\}\\}\\})"
+              endCaptures:
+                1:
+                  name: "entity.other.name.tiddler.title.template.tw5"
+            }
+            {
+              # If another non-whitespace character occurs below, start marking
+              # things illegal.
+              begin: "(?=\\S)"
+              end: "(?=\\}\\}\\})"
+              name: "invalid.illegal.multiline-tiddler-title.tw5"
+            }
+          ]
+        }
+        # Tokenize filter string.
+        # makeFilterRule("(?=\\|\\||\\}\\}\\})")
+        {
+          begin: "\\G"
+          end: "(?=\\|\\||\\}\\}\\})"
+          name: "meta.filter.tw5"
+          patterns: [
+            {
+              include: "#filter"
+            }
+          ]
         }
       ]
     transcludeinline:
