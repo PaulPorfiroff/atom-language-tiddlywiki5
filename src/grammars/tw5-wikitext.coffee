@@ -218,14 +218,14 @@ grammar =
       ]
     rules:
       match: "^(\\\\)(rules)\\s+(only|except)?(.*)$"
-      name: "meta.pragma.rules.comment.tw5"
+      name: "meta.pragma.directive.rules.tw5"
       captures:
         1:
-          name: "punctuation.definition.pragma.tw5"
+          name: "punctuation.definition.pragma.directive.tw5"
         2:
-          name: "keyword.other.rules.tw5"
+          name: "keyword.control.directive.rules.tw5"
         3:
-          name: "keyword.other.$3.tw5"
+          name: "keyword.operator.$3.tw5"
         4:
           patterns: [
             {
