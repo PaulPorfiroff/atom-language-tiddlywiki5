@@ -32,6 +32,36 @@ grammar =
       include: "#wikitext"
     }
   ]
+  injections:
+    "meta.function.macro.body.tw5":
+      patterns: [
+        {
+          # From `Widget::substituteVariableReferences()`
+          comment: "Parse variable reference."
+          match: "(\\$\\()(.+?)(\\)\\$)"
+          name: "markup.other.variable.variable-reference.tw5"
+          captures:
+            1:
+              name: "punctuation.definition.variable.variable-reference.begin.tw5"
+            2:
+              name: "entity.other.name.variable.tw5"
+            3:
+              name: "punctuation.definition.variable.variable-reference.end.tw5"
+        }
+        {
+          # From `Widget::substituteVariableParameters()`
+          comment: "Parse variable parameter."
+          match: "(\\$)(.*?)(\\$)"
+          name: "markup.other.variable.variable-parameter.tw5"
+          captures:
+            1:
+              name: "punctuation.definition.variable.variable-parameter.begin.tw5"
+            2:
+              name: "variable.parameter.tw5"
+            3:
+              name: "punctuation.definition.variable.variable-parameter.end.tw5"
+        }
+      ]
   repository:
     wikitext:
       patterns: [
@@ -54,10 +84,138 @@ grammar =
     pragma:
       patterns: [
         {
+          include: "#macrodef"
+        }
+        {
           include: "#rules"
         }
       ]
 
+    macrodef:
+      # @HACK:
+      # Expect macro name to be on the same line, as pragma definition start.
+      # @HACK:
+      # In `WikiParser`'s `macrodef` rule macro body is considered empty, if no
+      # end pattern was found. However, cannot do multiline lookahead with
+      # PEG rules here.
+      # So, there's an ambiguity between empty and multiline macro bodies, which
+      # is ignored.
+      begin: "^(\\\\)(define)\\s+([^\\s\\(]+)(?=\\()"
+      end: "^"
+      name: "meta.pragma.directive.function.macro.tw5"
+      beginCaptures:
+        1:
+          name: "punctuation.definition.pragma.directive.tw5"
+        2:
+          name: "keyword.control.directive.define.tw5"
+        3:
+          name: "entity.name.function.macro.tw5"
+      patterns: [
+        {
+          comment: "Match single line macro body."
+          match: "(?<=\\))\\s*(\\S.*)$"
+          captures:
+            1:
+              # @NOTE:
+              # This way injections will work.
+              begin: "^"
+              end: "$"
+              name: "meta.function.macro.body.tw5"
+              patterns: [
+                {
+                  include: "#wikitext"
+                }
+              ]
+        }
+        {
+          comment: "Match multiline macro body."
+          begin: "(?<=\\))\\s*$"
+          end: "(\\\\)(end)\\s*?$"
+          contentName: "meta.function.macro.body.tw5"
+          endCaptures:
+            1:
+              name: "punctuation.definition.pragma.directive.tw5"
+            2:
+              name: "keyword.control.directive.end.tw5"
+          patterns: [
+            {
+              include: "#block"
+            }
+            makeFallbackBlockRule("(?=\\\\end\\s*?$)")
+          ]
+        }
+        {
+          comment: "Parse parameter list."
+          begin: "(?<=\\S)\\("
+          end: "\\)"
+          name: "meta.function.macro.parameters.tw5"
+          beginCaptures:
+            0:
+              name: "punctuation.definition.function.macro.parameters.begin.tw5"
+          endCaptures:
+            0:
+              name: "punctuation.definition.function.macro.parameters.end.tw5"
+          patterns: [
+            # @HACK:
+            # Assume parameter name and default value are on the same line.
+            {
+              # Match parameter with default value expressed by a quoted string.
+              begin: "([\\w\\-]+)(?:\\s*(:)\\s*(?=#{begin}))"
+              end: "(?<=#{end})"
+              name: "meta.function.macro.parameter.tw5"
+              contentName: "entity.other.default.value.tw5"
+              beginCaptures:
+                1:
+                  name: "variable.parameter.tw5"
+                2:
+                  name: "keyword.operator.assignment.tw5"
+              patterns: [
+                {
+                  include: "#string"
+                }
+              ]
+            } for [begin, end] in [
+              ["\"\"\"", "\"\"\""]
+              ["\"", "\""]
+              ["\'", "\'"]
+              ["\\[\\[", "\\]\\]"]
+            ]...
+            {
+              # Match parameter with default value expressed by an unquoted
+              # string.
+              match: "([\\w\\-]+)(?:\\s*(:)\\s*([^\\)\"\'\\s]+))"
+              name: "meta.function.macro.parameter.tw5"
+              captures:
+                1:
+                  name: "variable.parameter.tw5"
+                2:
+                  name: "keyword.operator.assignment.tw5"
+                3:
+                  begin: "^"
+                  end: "$"
+                  name: "entity.other.default.value.tw5"
+                  patterns: [
+                    {
+                      include: "#string"
+                    }
+                  ]
+            }
+            {
+              comment: "Parse formal argument definition."
+              match: "[\\w\\-]+"
+              name: "meta.function.macro.parameter.tw5"
+              captures:
+                0:
+                  name: "variable.parameter.tw5"
+            }
+            {
+              comment: "Match parameter separators."
+              match: "[^\\w\\-\\)\\s]+"
+              name: "punctuation.separator.function.macro.parameter.tw5"
+            }
+          ]
+        }
+      ]
     rules:
       match: "^(\\\\)(rules)\\s+(only|except)?(.*)$"
       name: "meta.pragma.rules.comment.tw5"

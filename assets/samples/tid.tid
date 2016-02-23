@@ -6,6 +6,84 @@ field:value
 :
  # No valid key-value pair in this line, just ignore it
 
+\define myMacro()''single line'' body
+\define myMacro()  ''single line'' body  
+\define myMacro()  ''single line body  
+\define myMacro()
+\end
+\define myMacro()  
+\end
+\define myMacro()  
+* ''multiline'' body
+
+This paragraph ends here.
+\end
+\define myMacro(arg1 arg2) two formal arguments
+\define myMacro(arg1,arg2) two formal arguments
+\define myMacro(arg1, arg2) two formal arguments
+\define myMacro(~arg1~~~arg2!! !!!arg3!!! ) almost any separator will do
+\define myMacro(~arg1~~~arg2!! !!!arg3!!!) almost any separator will do
+\define myMacro(
+) multiline parameter list
+\define myMacro(
+
+) multiline parameter list
+\define myMacro(
+~arg1~~~arg2!! !!!arg3!!!
+) multiline parameter list
+\define myMacro(
+~
+    arg1
+        ~~~
+            arg2
+        !!
+    !!!
+arg3!!!
+) multiline parameter list
+
+\define myMacro(arg1:default) `arg1` will default to `default`
+\define myMacro(arg1 : default) `arg1` will default to `default`
+\define myMacro( arg1   :   default,arg2?)) still 1 parameter
+\define myMacro( arg1   :   default ) default value set with unquoted string
+\define myMacro( arg1   :   [[ 
+"'default'"
+ ]] ) default value set with quoted string
+\define myMacro( arg1   :   """ 
+'default'
+ """ ) default value set with quoted string
+\define myMacro( arg1   :   " 
+'default'
+ " ) default value set with quoted string
+\define myMacro( arg1   :   ' 
+"default"
+ ' ) default value set with quoted string 
+
+\define myMacro(
+ ~
+     arg1 : "
+default for arg1
+"~~~
+             arg2 : default_for_arg2!!
+             !!!
+
+arg3!!!
+ ) ...
+
+\define myMacro( arg1 : default )
+Before parsing macro body text, it's being preprocessed.
+
+* Preprocessor replaces variable parameters `$arg1$` with actual values passed on macro invokation.
+* Preprocessor replaces variable references `$(currentTiddler)$` with context variables (set using e.g. `SetWidget` or `VarsWidget` widgets), visible at macro invokation scope.
+\end
+
+\define myMacro( arg1   :   default)) append some parens
+\define myMacro(( arg1   :   default)) append some parens
+\define myMacro(( arg1  ( :  default)) 2 parameters
+\define myMacro( arg1   ,:   default ) 2 parameters
+\define myMacro( arg1   :   default"arg2")) 2 parameters
+\define myMacro( arg1   :   "default"arg2)) 2 parameters
+\define myMacro( arg1   :   "default""arg2" : "arg3")) 3 parameters
+
 \rules does not amend parser rules without only or except
 \rules except rules
 \rules except bold italic heading
@@ -349,7 +427,6 @@ wraps inline run""" into `HTMLSpanElement` @@
   +"tiddler title"+tiddler_title+'tiddler title'+[[tiddler title]]
   +"tiddler title"+'tiddler title'+[[tiddler title]]+tiddler_title
 }}}
-
 
 {{}}
 {{ }}
