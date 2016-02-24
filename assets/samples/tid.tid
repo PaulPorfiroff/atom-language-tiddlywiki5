@@ -210,6 +210,53 @@ Before parsing macro body text, it's being preprocessed.
 ''Inline styling''
 wraps inline run""" into `HTMLSpanElement` @@
 
+* <<myMacro>>
+* <<myMacro >>
+* <<myMacro
+>>
+* <<myMacro
+>>
+* <<myMacro
+
+  
+
+  >>
+* <<myMacro value_for_arg1 value_for_arg2>>
+* <<myMacro [["'value_for_arg1'"]]
+[[
+  "'value for arg2'"
+]]>>
+* <<myMacro """ "'value_for_arg1'" """
+ """
+  "'value for arg2'"
+""">>
+* <<myMacro "'value_for_arg1'"
+"
+  'value for arg2'
+">>
+* <<myMacro '"value_for_arg1"'
+'
+  "value for arg2"
+'>>
+* <<myMacro arg2:value_for_arg2 value_for_arg1>>
+* <<myMacro arg2  :  value_for_arg2 value_for_arg1>>
+* <<myMacro arg2  :  [[
+  "'value for arg2'"
+]] [["'value_for_arg1'"]]
+>>
+* <<myMacro arg2  :  """
+  "'value for arg2'"
+""" """ "'value_for_arg1'" """
+>>
+* <<myMacro arg2  :  "
+  'value for arg2'
+" "'value_for_arg1'"
+>>
+* <<myMacro arg2  :  '
+  "value for arg2"
+' '"value_for_arg1"'
+>>
+
 * {{{}}}
 * {{{ }}}
 * {{{||}}}
@@ -604,6 +651,53 @@ for the bottom cite
 <<<
 <<<<
 <<<<<
+
+<<myMacro>>
+<<myMacro >>
+<<myMacro
+>>
+  <<myMacro
+>>
+  <<myMacro
+
+  
+
+  >>
+<<myMacro value_for_arg1 value_for_arg2>>
+<<myMacro [["'value_for_arg1'"]]
+[[
+  "'value for arg2'"
+]]>>
+<<myMacro """ "'value_for_arg1'" """
+ """
+  "'value for arg2'"
+""">>
+<<myMacro "'value_for_arg1'"
+"
+  'value for arg2'
+">>
+<<myMacro '"value_for_arg1"'
+'
+  "value for arg2"
+'>>
+<<myMacro arg2:value_for_arg2 value_for_arg1>>
+<<myMacro arg2  :  value_for_arg2 value_for_arg1>>
+<<myMacro arg2  :  [[
+  "'value for arg2'"
+]] [["'value_for_arg1'"]]
+>>
+<<myMacro arg2  :  """
+  "'value for arg2'"
+""" """ "'value_for_arg1'" """
+>>
+<<myMacro arg2  :  "
+  'value for arg2'
+" "'value_for_arg1'"
+>>
+<<myMacro arg2  :  '
+  "value for arg2"
+' '"value_for_arg1"'
+>>
 
 ```
 Raw block

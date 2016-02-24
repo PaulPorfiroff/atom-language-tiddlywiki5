@@ -253,6 +253,9 @@ grammar =
           include: "#quoteblock"
         }
         {
+          include: "#macrocallblock"
+        }
+        {
           include: "#filteredtranscludeblock"
         }
         {
@@ -516,6 +519,78 @@ grammar =
             }
           ]
         } for detector in ["<<<<<", "<<<<", "<<<"]...
+      ]
+    macrocallblock:
+      begin: "^\\s*(<<)([^>\\s]+)"
+      end: "(>>)\\r?\\n"
+      name: "meta.function-call.macrocallblock.tw5"
+      contentName: "meta.function.macro.parameters.tw5"
+      beginCaptures:
+        1:
+          name: "punctuation.definition.macrocallblock.begin.tw5"
+        2:
+          name: "entity.name.function.macro.tw5"
+      endCaptures:
+        1:
+          name: "punctuation.definition.macrocallblock.end.tw5"
+      patterns: [
+        # @HACK:
+        # Assume parameter name and value are on the same line.
+        {
+          # Match positional or named assignment of value, expressed by a quoted
+          # string.
+          #
+          # @FIXME:
+          # For some reason fails to stop eating strings in constructs like
+          # these:
+          #
+          # ```
+          # <<myMacro 'value1''value2'>>
+          # <<myMacro "value1""value2">>
+          # ```
+          begin: "(?:([\\w\\-]+)\\s*(:)\\s*)?(?=#{begin})"
+          end: "(?<=#{end})"
+          name: "meta.function.macro.parameter.tw5"
+          beginCaptures:
+            1:
+              name: "variable.parameter.tw5"
+            2:
+              name: "keyword.operator.assignment.tw5"
+          patterns: [
+            {
+              include: "#string"
+            }
+          ]
+        } for [begin, end] in [
+          ["\"\"\"", "\"\"\""]
+          ["\"", "\""]
+          ["\'", "\'"]
+          ["\\[\\[", "\\]\\]"]
+        ]...
+        {
+          # Match positional or named assignment of value, expressed by an
+          # unquoted string.
+          match: "(?:([\\w\\-]+)\\s*(:)\\s*)?([^\\>\"\'\\s]+)"
+          name: "meta.function.macro.parameter.tw5"
+          captures:
+            1:
+              name: "variable.parameter.tw5"
+            2:
+              name: "keyword.operator.assignment.tw5"
+            3:
+              begin: "^"
+              end: "$"
+              patterns: [
+                {
+                  include: "#string"
+                }
+              ]
+        }
+        {
+          comment: "Match separators."
+          match: "[^\\w\\-\\>\\s]+"
+          name: "punctuation.separator.function.macro.parameter.tw5"
+        }
       ]
     filteredtranscludeblock:
       # @HACK:
@@ -859,6 +934,9 @@ grammar =
           include: "#hardlinebreaks"
         }
         {
+          include: "#macrocallinline"
+        }
+        {
           include: "#filteredtranscludeinline"
         }
         {
@@ -947,6 +1025,80 @@ grammar =
       patterns: [
         {
           include: "#inline"
+        }
+      ]
+    macrocallinline:
+      # @NOTE:
+      # Copy of `macrocallblock` rule.
+      begin: "(<<)([^>\\s]+)"
+      end: "(>>)"
+      name: "meta.function-call.macrocallinline.tw5"
+      contentName: "meta.function.macro.parameters.tw5"
+      beginCaptures:
+        1:
+          name: "punctuation.definition.macrocallinline.begin.tw5"
+        2:
+          name: "entity.name.function.macro.tw5"
+      endCaptures:
+        1:
+          name: "punctuation.definition.macrocallinline.end.tw5"
+      patterns: [
+        # @HACK:
+        # Assume parameter name and value are on the same line.
+        {
+          # Match positional or named assignment of value, expressed by a quoted
+          # string.
+          #
+          # @FIXME:
+          # For some reason fails to stop eating strings in constructs like
+          # these:
+          #
+          # ```
+          # <<myMacro 'value1''value2'>>
+          # <<myMacro "value1""value2">>
+          # ```
+          begin: "(?:([\\w\\-]+)\\s*(:)\\s*)?(?=#{begin})"
+          end: "(?<=#{end})"
+          name: "meta.function.macro.parameter.tw5"
+          beginCaptures:
+            1:
+              name: "variable.parameter.tw5"
+            2:
+              name: "keyword.operator.assignment.tw5"
+          patterns: [
+            {
+              include: "#string"
+            }
+          ]
+        } for [begin, end] in [
+          ["\"\"\"", "\"\"\""]
+          ["\"", "\""]
+          ["\'", "\'"]
+          ["\\[\\[", "\\]\\]"]
+        ]...
+        {
+          # Match positional or named assignment of value, expressed by an
+          # unquoted string.
+          match: "(?:([\\w\\-]+)\\s*(:)\\s*)?([^\\>\"\'\\s]+)"
+          name: "meta.function.macro.parameter.tw5"
+          captures:
+            1:
+              name: "variable.parameter.tw5"
+            2:
+              name: "keyword.operator.assignment.tw5"
+            3:
+              begin: "^"
+              end: "$"
+              patterns: [
+                {
+                  include: "#string"
+                }
+              ]
+        }
+        {
+          comment: "Match separators."
+          match: "[^\\w\\-\\>\\s]+"
+          name: "punctuation.separator.function.macro.parameter.tw5"
         }
       ]
     filteredtranscludeinline:
@@ -1414,8 +1566,8 @@ grammar =
     string:
       patterns: [
         {
-          begin: mark
-          end: mark
+          begin: begin
+          end: end
           name: "#{scope}.string.quoted.tw5"
           beginCaptures:
             0:
@@ -1423,10 +1575,12 @@ grammar =
           endCaptures:
             0:
               name: "#{scope}.punctuation.definition.string.end.tw5"
-        } for mark, scope of {
-          "\"": "double"
-          "\'": "single"
-        }...
+        } for [begin, end, scope] in [
+          ["\"\"\"", "\"\"\"", "triple"]
+          ["\"",     "\"",     "double"]
+          ["\'",     "\'",     "single"]
+          ["\\[\\[", "\\]\\]", "parens.square"]
+        ]...
         {
           match: "\\S+"
           name: "string.unquoted.tw5"
