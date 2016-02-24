@@ -154,7 +154,7 @@ Before parsing macro body text, it's being preprocessed.
 * ``raw` `raw``not raw
 
 * http://tiddlywiki.com/
-* ~http://tiddlywiki.com/
+* ~http://tiddlywiki.com//
 
 * $:/core/modules/parsers/wikiparser/rules/syslink.js
 * ~$:/core/modules/parsers/wikiparser/rules/syslink.js
