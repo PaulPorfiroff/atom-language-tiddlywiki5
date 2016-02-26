@@ -162,7 +162,7 @@ grammar =
               # Match parameter with default value expressed by a quoted string.
               begin: "([\\w\\-]+)(?:\\s*(:)\\s*(?=#{begin}))"
               end: "(?<=#{end})"
-              name: "meta.function.macro.parameter.tw5"
+              name: "meta.function.macro.parameter.tw-$1.tw5"
               contentName: "entity.other.default.value.tw5"
               beginCaptures:
                 1:
@@ -184,7 +184,7 @@ grammar =
               # Match parameter with default value expressed by an unquoted
               # string.
               match: "([\\w\\-]+)(?:\\s*(:)\\s*([^\\)\"\'\\s]+))"
-              name: "meta.function.macro.parameter.tw5"
+              name: "meta.function.macro.parameter.tw-$1.tw5"
               captures:
                 1:
                   name: "variable.parameter.tw5"
@@ -203,7 +203,7 @@ grammar =
             {
               comment: "Parse formal argument definition."
               match: "[\\w\\-]+"
-              name: "meta.function.macro.parameter.tw5"
+              name: "meta.function.macro.parameter.tw-$1.tw5"
               captures:
                 0:
                   name: "variable.parameter.tw5"
@@ -550,7 +550,7 @@ grammar =
           # ```
           begin: "(?:([\\w\\-]+)\\s*(:)\\s*)?(?=#{begin})"
           end: "(?<=#{end})"
-          name: "meta.function.macro.parameter.tw5"
+          name: "meta.function.macro.parameter.tw-$1.tw5"
           beginCaptures:
             1:
               name: "variable.parameter.tw5"
@@ -571,7 +571,7 @@ grammar =
           # Match positional or named assignment of value, expressed by an
           # unquoted string.
           match: "(?:([\\w\\-]+)\\s*(:)\\s*)?([^\\>\"\'\\s]+)"
-          name: "meta.function.macro.parameter.tw5"
+          name: "meta.function.macro.parameter.tw-$1.tw5"
           captures:
             1:
               name: "variable.parameter.tw5"
@@ -1062,7 +1062,7 @@ grammar =
           # ```
           begin: "(?:([\\w\\-]+)\\s*(:)\\s*)?(?=#{begin})"
           end: "(?<=#{end})"
-          name: "meta.function.macro.parameter.tw5"
+          name: "meta.function.macro.parameter.tw-$1.tw5"
           beginCaptures:
             1:
               name: "variable.parameter.tw5"
@@ -1083,7 +1083,7 @@ grammar =
           # Match positional or named assignment of value, expressed by an
           # unquoted string.
           match: "(?:([\\w\\-]+)\\s*(:)\\s*)?([^\\>\"\'\\s]+)"
-          name: "meta.function.macro.parameter.tw5"
+          name: "meta.function.macro.parameter.tw-$1.tw5"
           captures:
             1:
               name: "variable.parameter.tw5"
@@ -1498,8 +1498,6 @@ grammar =
               # only way to achieve the desired scoping. Otherwise no viable way
               # to detect the end of single operator in chain of operators.
               # @IDEA:
-              # Maybe store captured operator name/suffix in scope names.
-              # @IDEA:
               # Process specific operands explicitly (e.g. provide regex
               # highlighting).
               # @HACK:
@@ -1508,7 +1506,7 @@ grammar =
               # Consider operator name and suffix, and operand one liner.
               comment: "Match filter operator (step)."
               match: "(!?)([^\\[\\{<]*?)(?:(:)([^\\[\\{<]*?))?((#{begin})(.*?)(#{end}))"
-              name: "meta.filter.operator.step.tw5"
+              name: "meta.filter.operator.step.tw-$2.tw-suffix-$4.tw5"
               captures:
                 1:
                   name: "keyword.operator.prefix.not.negation.tw5"
