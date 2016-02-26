@@ -943,6 +943,9 @@ grammar =
           include: "#transcludeinline"
         }
         {
+          include: "#image"
+        }
+        {
           include: "#link"
         }
         {
@@ -1219,6 +1222,57 @@ grammar =
               begin: "(?=\\S)"
               end: "(?=\\|\\||\\}\\})"
               name: "invalid.illegal.multiline-text-reference.tw5"
+            }
+          ]
+        }
+      ]
+    image:
+      begin: "(\\[)(img)"
+      end: "(?<=\\])\\]"
+      name: "markup.other.image.tw5"
+      beginCaptures:
+        1:
+          name: "punctuation.definition.image.outer.begin.tw5"
+        2:
+          name: "keyword.other.img.tw5"
+      endCaptures:
+        0:
+          name: "punctuation.definition.image.outer.end.tw5"
+      patterns: [
+        {
+          # @HACK:
+          # Support only single line source spec, because can't distinguish
+          # `[img[<URL>]]` and `[img[<Text>|<URL>]]` beforehand at multiple
+          # lines (no backtracking for `begin`/`end` rule).
+          comment: "Parse image source."
+          match: "(\\[)(.*?)(\\])(?=\\])"
+          captures:
+            1:
+              name: "punctuation.definition.image.inner.begin.tw5"
+            2:
+              patterns: [
+                {
+                  match: "^(?:([^|]*)(\\|))?(.+)$"
+                  captures:
+                    1:
+                      name: "entity.other.title.tooltip.tw5"
+                    2:
+                      name: "punctuation.definition.image.title.tooltip.tw5"
+                    3:
+                      name: "markup.underline.link.tw5"
+                }
+              ]
+            3:
+              name: "punctuation.definition.image.inner.end.tw5"
+        }
+        {
+          comment: "Parse attribute list."
+          begin: "\\G"
+          end: "(?=\\[)"
+          name: "meta.attributes.tw5"
+          patterns: [
+            {
+              include: "#attribute"
             }
           ]
         }
@@ -1535,6 +1589,85 @@ grammar =
                           include: "#string"
                         }
                       ]
+                }
+              ]
+        }
+      ]
+    # From $tw.utils.parseAttribute()
+    # @HACK:
+    # Assume attribute name and its value are on the same line.
+    attribute:
+      patterns: [
+        {
+          # Match attribute assigned a quoted string value.
+          begin: "([^\\s\\/>\"\'=]+)\\s*(=)\\s*(?=#{begin})"
+          end: "(?<=#{end})"
+          name: "meta.attribute.tw-$1.tw5"
+          contentName: "direct.entity.attribute-value.tw5"
+          captures:
+            1:
+              name: "entity.other.attribute-name.t5"
+            2:
+              name: "keyword.operator.assignment.tw5"
+          patterns: [
+            {
+              include: "#string"
+            }
+          ]
+        } for [begin, end, scope, patterns] in [
+          ["\"\"\"", "\"\"\""]
+          ["\"", "\""]
+          ["\'", "\'"]
+        ]...
+        {
+          # Match attribute assigned evaluated value.
+          begin: "([^\\s\\/>\"\'=]+)\\s*(=)\\s*(?=#{begin})"
+          end: "(?<=#{end})"
+          name: "meta.attribute.tw-$1.tw5"
+          contentName: "#{scope}.entity.attribute-value.tw5"
+          captures:
+            1:
+              name: "entity.other.attribute-name.t5"
+            2:
+              name: "keyword.operator.assignment.tw5"
+          patterns: patterns
+        } for [begin, end, scope, patterns] in [
+          ["<<[^>\\s]+", ">>", "variable.macro", [
+            {
+              include: "#macrocallinline"
+            }
+          ]]
+          ["\\{\\{", "\\}\\}", "indirect", [
+            {
+              match: "(\\{\\{)(.*?)(\\}\\})"
+              captures:
+                1:
+                  name: "punctuation.definition.text-reference.begin.tw5"
+                2:
+                  patterns: [
+                    {
+                      include: "#textReference"
+                    }
+                  ]
+                3:
+                  name: "punctuation.definition.text-reference.end.tw5"
+            }
+          ]]
+        ]...
+        {
+          # Match attribute assigned an unquoted string value or without a
+          # value.
+          match: "([^\\s\\/>\"\'=]+)(?:\\s*(=)\\s*([^\\s\\/<>\"\'=]+))?"
+          name: "meta.attribute.tw-$1.tw5"
+          captures:
+            1:
+              name: "entity.other.attribute-name.t5"
+            2:
+              name: "keyword.operator.assignment.tw5"
+            3:
+              patterns: [
+                {
+                  include: "#string"
                 }
               ]
         }

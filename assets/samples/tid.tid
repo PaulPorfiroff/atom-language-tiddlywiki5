@@ -200,6 +200,34 @@ Before parsing macro body text, it's being preprocessed.
 * [ext[ | ]]
 * [ext[|]]
 
+* [img[]]
+* [img[ ]]
+* [img [ ]]
+* [img [Tiddler title]]
+* [img [ Tiddler title ]]
+* [img [|Tiddler title ]]
+* [img [ | Tiddler title ]]
+* [img [Tooltip text| Tiddler title ]]
+* [img [ Tooltip text | Tiddler title ]]
+* [img [ Tooltip text | http://fakeimg.pl/100/ ]]
+* [img width=50 [ Tooltip text | http://fakeimg.pl/100/ ]]
+* [img
+width = """
+  50
+"""
+height = "
+  50
+"
+source = '
+  URI
+'
+alt = {{tiddler!!field}}
+class = <<myMacro
+  arg1 : """
+  value
+""">>
+  [ Tooltip text | http://fakeimg.pl/100/ ]]
+
 * @@@@
 * @@''Inline styling''@@
 * @@.class1.class2 ''Inline styling''@@
