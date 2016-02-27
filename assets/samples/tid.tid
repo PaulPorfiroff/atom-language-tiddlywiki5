@@ -131,6 +131,38 @@ Before parsing macro body text, it's being preprocessed.
 * -----
 * -- --- ---- -----
 
+* <!---->
+* <!-- -->
+* <!--
+-->
+* <!--comment-->
+* <!--
+  comment
+-->
+* <!--
+  comment1
+--><!--
+  comment2
+-->
+
+<!---->
+<!-- -->
+<!--
+-->
+<!--comment-->
+<!--
+  comment
+-->
+<!--
+  comment1
+--><!--
+  comment2
+-->
+
+//not comment// <!-- inline comment -->
+
+<!-- block comment --> //not comment//
+
 * ''bold''
 * //italic//
 * __underscore__

@@ -273,6 +273,9 @@ grammar =
         {
           include: "#horizrule"
         }
+        {
+          include: "#commentblock"
+        }
       ]
 
     codeblock:
@@ -914,6 +917,16 @@ grammar =
     horizrule:
       match: "^\\s*-{3,}$"
       name: "meta.separator.hr.tw5"
+    commentblock:
+      begin: "<!--"
+      end: "-->"
+      name: "comment.block.commentblock.tw5"
+      beginCaptures:
+        0:
+          name: "punctuation.definition.comment.begin.tw5"
+      endCaptures:
+        0:
+          name: "punctuation.definition.comment.end.tw5"
 
 #
 # Section: Wiki text inline rules
@@ -950,6 +963,9 @@ grammar =
         }
         {
           include: "#dash"
+        }
+        {
+          include: "#commentinline"
         }
       ]
 
@@ -1402,6 +1418,16 @@ grammar =
           "---": "mdash"
         }...
       ]
+    commentinline:
+      begin: "<!--"
+      end: "-->"
+      name: "comment.block.commentinline.tw5"
+      beginCaptures:
+        0:
+          name: "punctuation.definition.comment.begin.tw5"
+      endCaptures:
+        0:
+          name: "punctuation.definition.comment.end.tw5"
 #
 # Section: Shared helper rules
 #
