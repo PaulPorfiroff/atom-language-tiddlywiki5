@@ -15,7 +15,7 @@ regexes = new ->
 # WikiParser::parseBlock() defaults to paragraph node, if no block rule matches
 # at current position.
 makeFallbackBlockRule = (endRegEx) ->
-  begin: "^(?!\\s*$)"
+  begin: "(?!\\s*$)"
   end: if endRegEx then "(?:#{endRegEx})|^$" else "^$"
   name: "markup.other.paragraph.tw5"
   patterns: [
@@ -72,9 +72,6 @@ grammar =
           include: "#block"
         }
         makeFallbackBlockRule()
-        {
-          include: "text.html.basic"
-        }
       ]
 
 #
@@ -279,7 +276,7 @@ grammar =
       ]
 
     codeblock:
-      begin: "^\\s*(```)(?=[\\w-]*$)"
+      begin: "\\s*(```)(?=[\\w-]*$)"
       end: "^(```)$"
       name: "meta.codeblock.tw5"
       beginCaptures:
@@ -338,7 +335,7 @@ grammar =
         }
       ]
     typedblock:
-      begin: "^\\s*(\\$\\$\\$)(?=[^\\s>]*(?:\\s*>\\s*\\S+)?$)"
+      begin: "\\s*(\\$\\$\\$)(?=[^\\s>]*(?:\\s*>\\s*\\S+)?$)"
       end: "^(\\$\\$\\$)$"
       name: "meta.typedblock.tw5"
       beginCaptures:
@@ -392,7 +389,7 @@ grammar =
       # @NOTE:
       # The only difference between `styleinline` and `styleblock` detectors is
       # mandatory EOL for the latter, so can't reduce the `begin` regex.
-      begin: "^\\s*(?=@@(#{regexes.styles})?(#{regexes.classes})?$)"
+      begin: "\\s*(?=@@(#{regexes.styles})?(#{regexes.classes})?$)"
       end: "(?<=^@@)\\s*(.*)$"
       contentName: "markup.other.style.styleblock.tw5"
       endCaptures:
@@ -468,7 +465,7 @@ grammar =
           applyEndPatternLast: 1
           # If empty top cite given, eat EOL to go to new line and skip top cite
           # rule.
-          begin: "^\\s*(#{detector})(?!<)(?:\\r?\\n)?"
+          begin: "\\s*(#{detector})(?!<)(?:\\r?\\n)?"
           end: "$"
           name: "markup.quote.blockquote.tw5"
           beginCaptures:
@@ -524,7 +521,7 @@ grammar =
         } for detector in ["<<<<<", "<<<<", "<<<"]...
       ]
     macrocallblock:
-      begin: "^\\s*(<<)([^>\\s]+)"
+      begin: "\\s*(<<)([^>\\s]+)"
       end: "(>>)\\r?\\n"
       name: "meta.function-call.macrocallblock.tw5"
       contentName: "meta.function.macro.parameters.tw5"
@@ -599,7 +596,7 @@ grammar =
       # @HACK:
       # For now drop detection of `tooltip`, `style` and `itemClass` parts of
       # the rule, because the underlying `ListWidget` widget ignores them.
-      begin: "^\\s*(\\{\\{\\{)"
+      begin: "\\s*(\\{\\{\\{)"
       end: "(\\}\\}\\})\\r?\\n"
       name: "meta.transclusion.filteredtranscludeblock.tw5"
       beginCaptures:
@@ -655,7 +652,7 @@ grammar =
       # Only first non-empty lines of text reference and template title
       # are used. Whitespaces get trimmed, as in TW5 rule. Other lines are
       # marked illegal.
-      begin: "^\\s*(\\{\\{)"
+      begin: "\\s*(\\{\\{)"
       end: "(\\}\\})\\r?\\n"
       name: "meta.transclusion.transcludeblock.tw5"
       beginCaptures:
@@ -867,7 +864,7 @@ grammar =
     list:
       patterns: [
         {
-          begin: "^\\s*([\\*#;:>]*#{type}(?![\\*#;:>]))(#{regexes.classes})?"
+          begin: "\\s*([\\*#;:>]*#{type}(?![\\*#;:>]))(#{regexes.classes})?"
           end: "$"
           name: "#{scope}.markup.list.tw5"
           captures:
@@ -895,7 +892,7 @@ grammar =
     heading:
       patterns: [
         {
-          begin: "^\\s*(!{#{i}})(#{regexes.classes})?"
+          begin: "\\s*(!{#{i}})(#{regexes.classes})?"
           end: "$"
           name: "markup.heading.#{i}.tw5"
           beginCaptures:
@@ -915,7 +912,7 @@ grammar =
         } for i in [6..1]...
       ]
     horizrule:
-      match: "^\\s*-{3,}$"
+      match: "\\s*-{3,}$"
       name: "meta.separator.hr.tw5"
     commentblock:
       begin: "<!--"
