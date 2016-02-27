@@ -1017,14 +1017,14 @@ grammar =
       ]
     hardlinebreaks:
       begin: "\"\"\""
-      end: "\\0"
-      contentName: "markup.other.paragraph.tw5"
+      end: "\"\"\""
+      contentName: "markup.other.preformatted.hardlinebreaks.tw5"
       beginCaptures:
         0:
-          name: "punctuation.definition.paragraph.markup.begin.tw5"
+          name: "punctuation.definition.hardlinebreaks.begin.tw5"
       endCaptures:
         0:
-          name: "punctuation.definition.paragraph.markup.end.tw5"
+          name: "punctuation.definition.hardlinebreaks.end.tw5"
       patterns: [
         {
           include: "#inline"
