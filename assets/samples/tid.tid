@@ -125,6 +125,12 @@ Before parsing macro body text, it's being preprocessed.
  #*:.class1.class2 ''description''
 #>.class1.class2 ''quote''
 
+* &amp;
+* &#38;
+* &#x26;
+* &#X26;
+* &amp;&#38;&#x26;&#X26;
+
 * --
 * ---
 * ----

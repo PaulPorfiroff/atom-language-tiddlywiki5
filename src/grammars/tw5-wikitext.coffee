@@ -959,6 +959,9 @@ grammar =
           include: "#link"
         }
         {
+          include: "#entity"
+        }
+        {
           include: "#dash"
         }
         {
@@ -1405,6 +1408,14 @@ grammar =
       match: "(?<!#{regexes.unWikiLink})(?<!#{regexes.blockPrefixLetters})(?:#{regexes.wikiLink})"
       name: "markup.underline.link.wiki-link.tw5"
 
+    entity:
+      match: "(&)#?[^\\W_]{2,8}(;)"
+      name: "constant.character.entity.tw5"
+      captures:
+        1:
+          name: "punctuation.definition.entity.begin.tw5"
+        2:
+          name: "punctuation.definition.entity.end.tw5"
     dash:
       patterns: [
         {
