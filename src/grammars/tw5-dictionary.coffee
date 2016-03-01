@@ -30,7 +30,7 @@ grammar =
       # Tokenize predefined tiddler fields explicitly.
       patterns: [
         {
-          match: "^\\s*([^:]+?)??\\s*(:)\\s*(.+?)??\\s*$"
+          match: "^\\s*([^:]*?)\\s*(:)\\s*(.*?)\\s*$"
           name: "meta.value-pair.tiddler-field.tw5.dictionary"
           captures:
             1:
