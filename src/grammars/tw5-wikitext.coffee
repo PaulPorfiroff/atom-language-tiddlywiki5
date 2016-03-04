@@ -1501,14 +1501,16 @@ grammar =
       # @HACK:
       # Parse only single line links here, because can't distinguish `[ext[<URL>]]` and `[ext[<Text>|<URL>]]` beforehand
       # on multiple lines (no backtracking for `begin`/`end` rules).
-      match: "(\\[(ext)\\[)(.*?)(\\]\\])"
-      name: "meta.link.external.tw5"
+      match: "(\\[)(ext)(\\[)(.*?)(\\])(\\])"
+      name: "markup.link.external.tw5"
       captures:
         1:
-          name: "punctuation.definition.link.external.begin.tw5"
+          name: "punctuation.definition.link.outer.begin.tw5"
         2:
-          name: "keyword.other.ext.definition.link.tw5"
+          name: "keyword.other.ext.tw5"
         3:
+          name: "punctuation.definition.link.external.inner.begin.tw5"
+        4:
           patterns: [
             {
               comment: "Parse links like [ext[<Link title>|<URI>]]"
@@ -1535,15 +1537,19 @@ grammar =
                   name: "markup.underline.link.external.tw5"
             }
           ]
-        4:
-          name: "punctuation.definition.link.external.end.tw5"
+        5:
+          name: "punctuation.definition.link.external.inner.end.tw5"
+        6:
+          name: "punctuation.definition.link.external.outer.end.tw5"
     prettylink:
-      match: "(\\[\\[)(.*?)(\\]\\])"
-      name: "meta.link.tw5"
+      match: "(\\[)(\\[)(.*?)(\\])(\\])"
+      name: "markup.link.tw5"
       captures:
         1:
-          name: "punctuation.definition.link.begin.tw5"
+          name: "punctuation.definition.link.outer.begin.tw5"
         2:
+          name: "punctuation.definition.link.inner.begin.tw5"
+        3:
           patterns: [
             {
               comment: "Parse links like [[<Link title>|<URI>]]"
@@ -1569,8 +1575,10 @@ grammar =
                   name: "markup.underline.link.tw5"
             }
           ]
-        3:
-          name: "punctuation.definition.link.end.tw5"
+        4:
+          name: "punctuation.definition.link.inner.end.tw5"
+        5:
+          name: "punctuation.definition.link.outer.end.tw5"
 
     # @IDEA: Maybe add scoping for __explicitly__ suppressed links (preceeded by `~` by default)?
     extlink:
@@ -1581,10 +1589,10 @@ grammar =
       name: "markup.underline.link.external.$1.tw5"
     syslink:
       match: "(?<!#{regexes.unWikiLink})(\\$:\\/)[\\w\\/\\.\\-]+"
+      name: "markup.underline.link.wiki-link.syslink.tw5"
       captures:
         1:
           name: "punctuation.definition.link.wiki-link.syslink.tw5"
-      name: "markup.underline.link.wiki-link.syslink.tw5"
     wikilink:
       match: "(?<!#{regexes.unWikiLink})(?<!#{regexes.blockPrefixLetters})(?:#{regexes.wikiLink})"
       name: "markup.underline.link.wiki-link.tw5"
