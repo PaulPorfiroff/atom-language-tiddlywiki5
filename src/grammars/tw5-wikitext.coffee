@@ -27,6 +27,14 @@ makeFallbackBlockRule = (endRegEx) ->
 grammar =
   name: "TiddlyWiki5"
   scopeName: "text.html.tw5"
+  fileTypes: [
+    # @HACK:
+    # Fake file extension.
+    "tw5"
+  ]
+  # @HACK:
+  # Fake first line pattern.
+  firstLineMatch: "<!--\\s*TW5\\s*-->"
   patterns: [
     {
       include: "#wikitext"
@@ -1436,6 +1444,7 @@ grammar =
       endCaptures:
         0:
           name: "punctuation.definition.comment.end.tw5"
+
 #
 # Section: Shared helper rules
 #
