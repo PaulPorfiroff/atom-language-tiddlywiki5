@@ -4,7 +4,6 @@ change = require 'gulp-change'
 rename = require 'gulp-rename'
 coffeelint = require 'gulp-coffeelint'
 coffee = require 'coffee-script'
-CSON = require 'season'
 
 gulp.task 'build-grammars', ->
   gulp.src 'src/grammars/*.coffee'
@@ -14,8 +13,8 @@ gulp.task 'build-grammars', ->
       .pipe coffeelint()
       .pipe coffeelint.reporter()
       .pipe coffeelint.reporter('fail')
-      .pipe change (code) -> CSON.stringify coffee.eval(code, filename: @file.path)
-      .pipe rename extname: '.cson'
+      .pipe change (code) -> JSON.stringify coffee.eval(code, filename: @file.path)
+      .pipe rename extname: '.json'
       .pipe gulp.dest './grammars'
 
 gulp.task 'watch-grammars', ->
