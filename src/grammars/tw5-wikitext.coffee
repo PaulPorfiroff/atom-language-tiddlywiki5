@@ -249,6 +249,9 @@ grammar =
           include: "#codeblock"
         }
         {
+          include: "#htmlblock"
+        }
+        {
           include: "#typedblock"
         }
         {
@@ -342,6 +345,117 @@ grammar =
               name: "entity.other.attribute-name.language.tw5"
         }
       ]
+    htmlblock:
+      # @HACK:
+      # In TW5 block rule only matches if 2 EOL after the opening tag are met.
+      # Cannot detect it beforehand on multiple lines.
+      # @NOTE:
+      # Corresponds to the `html` TW5 rule.
+      patterns: [
+        {
+          begin: "\\s*(\\<)((\\$)([a-zA-Z0-9\\-]+))"
+          end: "(\\/>)|(<\\/)((\\$)\\4)(>)"
+          name: "meta.block.html.widget.tw-$4.tw5"
+          beginCaptures:
+            1:
+              name: "punctuation.definition.tag.begin.tw5"
+            2:
+              name: "entity.name.tag.tw5"
+            3:
+              name: "punctuation.definition.widget.tw5"
+          endCaptures:
+            1:
+              name: "punctuation.definition.tag.end.tw5"
+            2:
+              name: "punctuation.definition.tag.begin.tw5"
+            3:
+              name: "entity.name.tag.tw5"
+            4:
+              name: "punctuation.definition.tag.widget.tw5"
+          patterns: [
+            {
+              include: "#htmlAttributesAndText"
+            }
+          ]
+        }
+        {
+          begin: "\\s*(\\<)([a-zA-Z0-9\\-]+)"
+          end: "(\\/>)|(<\\/)(\\2)(>)"
+          name: "meta.block.html.element.tw-$2.tw5"
+          beginCaptures:
+            1:
+              name: "punctuation.definition.tag.begin.tw5"
+            2:
+              name: "entity.name.tag.tw5"
+          endCaptures:
+            1:
+              name: "punctuation.definition.tag.end.tw5"
+            2:
+              name: "punctuation.definition.tag.begin.tw5"
+            3:
+              name: "entity.name.tag.tw5"
+            4:
+              name: "punctuation.definition.tag.end.tw5"
+          patterns: [
+            {
+              include: "#htmlAttributesAndText"
+            }
+          ]
+        }
+      ]
+    # @IDEA:
+    # Maybe better not share this rule with `htmlinline`?
+    htmlAttributesAndText:
+      # Parse attribute list and text node of element or widget.
+      patterns: [
+        {
+          comment: "Parse text node."
+          # Eat empty line, so the parser moves to the next line.
+          begin: "(?<=>)(\\s*$)?"
+          end: "(?=<\\/)"
+          patterns: [
+            {
+              # Parse in block mode only if 2 empty lines are present.
+              comment: "Parse text node in block mode."
+              begin: "^\\s*$"
+              end: "(?=<\\/)"
+              name: "meta.body.block.tw5"
+              patterns: [
+                {
+                  include: "#block"
+                }
+                makeFallbackBlockRule("(?=<\\/)")
+              ]
+            }
+            {
+              comment: "Parse text node in inline mode."
+              begin: "(?=.*\\S)"
+              end: "(?=<\\/)"
+              name: "meta.body.inline.tw5"
+              patterns: [
+                {
+                  include: "#inline"
+                }
+              ]
+            }
+          ]
+        }
+        {
+          comment: "Parse attribute list."
+          begin: "\\G"
+          end: ">|(?=\\/?>)"
+          contentName: "meta.attributes.tw5"
+          endCaptures:
+            0:
+              name: "punctuation.definition.tag.end.tw5"
+          patterns: [
+            {
+              include: "#attribute"
+            }
+          ]
+        }
+      ]
+
     typedblock:
       begin: "\\s*(\\$\\$\\$)(?=[^\\s>]*(?:\\s*>\\s*\\S+)?$)"
       end: "^(\\$\\$\\$)$"
@@ -946,6 +1060,9 @@ grammar =
           include: "#codeinline"
         }
         {
+          include: "#htmlinline"
+        }
+        {
           include: "#styleinline"
         }
         {
@@ -1012,6 +1129,62 @@ grammar =
       endCaptures:
         0:
           name: "punctuation.definition.raw.markup.end.tw5"
+    htmlinline:
+      # @NOTE:
+      # Copy of the `htmlblock` rule.
+      # Corresponds to `html` rule in TW5.
+      patterns: [
+        {
+          begin: "(\\<)((\\$)([a-zA-Z0-9\\-]+))"
+          end: "(\\/>)|(<\\/)((\\$)\\4)(>)"
+          name: "meta.html.inline.widget.tw-$4.tw5"
+          beginCaptures:
+            1:
+              name: "punctuation.definition.tag.begin.tw5"
+            2:
+              name: "entity.name.tag.tw5"
+            3:
+              name: "punctuation.definition.widget.tw5"
+          endCaptures:
+            1:
+              name: "punctuation.definition.tag.end.tw5"
+            2:
+              name: "punctuation.definition.tag.begin.tw5"
+            3:
+              name: "entity.name.tag.tw5"
+            4:
+              name: "punctuation.definition.tag.widget.tw5"
+          patterns: [
+            {
+              include: "#htmlAttributesAndText"
+            }
+          ]
+        }
+        {
+          begin: "(\\<)([a-zA-Z0-9\\-]+)"
+          end: "(\\/>)|(<\\/)(\\2)(>)"
+          name: "meta.html.inline.element.tw-$2.tw5"
+          beginCaptures:
+            1:
+              name: "punctuation.definition.tag.begin.tw5"
+            2:
+              name: "entity.name.tag.tw5"
+          endCaptures:
+            1:
+              name: "punctuation.definition.tag.end.tw5"
+            2:
+              name: "punctuation.definition.tag.begin.tw5"
+            3:
+              name: "entity.name.tag.tw5"
+            4:
+              name: "punctuation.definition.tag.end.tw5"
+          patterns: [
+            {
+              include: "#htmlAttributesAndText"
+            }
+          ]
+        }
+      ]
     styleinline:
       begin: "(@@)(#{regexes.styles})?(#{regexes.classes})?"
       end: "(@@)"

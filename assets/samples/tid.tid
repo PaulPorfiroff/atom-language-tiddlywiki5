@@ -420,6 +420,69 @@ wraps inline run""" into `HTMLSpanElement` @@
 
 }}
 
+<div/>
+<div />
+<div></div>
+<div ></div>
+<div > </div>
+
+<div> ''inline'' rule matches element; ''inline'' run for contents </div>
+
+<div>
+''inline'' rule matches element
+''inline'' run for contents
+</div>
+<div>   
+
+  * ''inline'' rule matches element (because in paragraph block here)
+  * ''block'' run for contents
+
+Double EOL turns on block mode for element text node.
+</div>
+
+<div>
+
+  * ''block'' rule matches element
+  * ''block'' run for contents
+
+Double EOL allows block rule match element itself.
+Double EOL turns on block mode for element text node.
+</div>
+
+* Inline <div>Inline run, displayed as block</div> run
+* Inline <span>Inline run, displayed as inline</span> run
+* Inline <div>
+
+  * Block run
+  * displayed as block
+</div> run
+* Inline <span>
+
+  * Block run
+  * displayed as inline
+</span> run
+* <$my-widget
+attribute1 = """value"""
+attribute2 = "value"
+attribute3 = 'value'
+attribute4 = {{tiddler!!field}}
+attribute5 = <<myMacro arg1 : """value""">>
+attribute6
+>
+Inline  <my-tag
+  attribute1 = """value"""
+  attribute2 = "value"
+  attribute3 = 'value'
+  attribute4 = {{tiddler!!field}}
+  attribute5 = <<myMacro arg1 : """value""">>
+  attribute6
+  >
+
+  * Block
+  * run
+  </my-tag> Run
+</$my-widget>
+
 ||k
 | |k
 |||k
