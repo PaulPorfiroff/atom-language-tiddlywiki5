@@ -1,9 +1,22 @@
 {
   "name": "language-tiddlywiki5",
-  "description": "Syntax highlighting and snippets for TiddlyWiki5",
-  "version": "0.0.1",
+  "description": "TiddlyWiki5 wikitext and file formats support.",
+  "version": "0.1.0",
+  "keywords": [
+    "language",
+    "syntax",
+    "grammar",
+    "wiki",
+    "TiddlyWiki"
+  ],
   "license": "MIT",
-  "repository": "https://github.com/paulporfiroff/atom-language-tiddlywiki5",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paulporfiroff/atom-language-tiddlywiki5"
+  },
+  "bugs": {
+    "url": "https://github.com/paulporfiroff/atom-language-tiddlywiki5/issues"
+  },
   "engines": {
     "atom": "*"
   },
