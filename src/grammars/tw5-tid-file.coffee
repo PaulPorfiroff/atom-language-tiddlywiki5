@@ -32,6 +32,5 @@ grammar =
       ]
     }
   ]
-  repository: {}
 
 module.exports = grammar
