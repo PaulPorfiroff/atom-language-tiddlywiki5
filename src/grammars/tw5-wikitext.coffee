@@ -1016,7 +1016,7 @@ grammar =
         {
           begin: "\\s*(!{#{i}})(#{regexes.classes})?"
           end: "$"
-          name: "markup.heading.#{i}.tw5"
+          name: "markup.heading.heading-#{i}.tw5"
           beginCaptures:
             1:
               name: "punctuation.definition.heading.markup.tw5"
