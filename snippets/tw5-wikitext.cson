@@ -1,0 +1,40 @@
+"""
+.meta.widget.tw-button.tw5 > .meta.body.tw5,
+.meta.widget.tw-keyboard.tw5 > .meta.body.tw5
+""":
+# `action-deletefield`
+  'Widget ActionDeleteField':
+    'description': 'Deletes specified fields of a tiddler.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#ActionDeleteFieldWidget'
+    'prefix': 'action-deletefield'
+    'body': '<$action-deletefield ${1:$tiddler=${2:<<currentTiddler>>} }${3:$field=${4:<<name>>} }${5:field1 field2 field3} />$0'
+# `action-deletetiddler`
+  'Widget ActionDeleteTiddler':
+    'description': 'Deletes tiddlers matching filter without confirmation.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#ActionDeleteTiddlerWidget'
+    'prefix': 'action-deletetiddler'
+    'body': '<$action-deletetiddler ${1:$tiddler=${2:<<currentTiddler>>} }${3:$filter="[is[current]]" } />$0'
+# `action-listops`
+  'Widget ActionListops':
+    'description': 'Manipulates user lists in any field or index.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#ActionListopsWidget'
+    'prefix': 'action-listops'
+    'body': '<$action-listops${1: $tiddler=${2:<<currentTiddler>>}} $field="${3:list}"${4: $filter="${5:[is[current]]}"}${6: $subfilter="${7:-[is[current]]}"} />$0'
+# `action-navigate`
+  'Widget ActionNavigate':
+    'description': 'Sends a `tm-navigate` message back up the widget tree.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#ActionNavigateWidget'
+    'prefix': 'action-navigate'
+    'body': '<$action-navigate $to=${1:<<currentTiddler>>}${2: $scroll="${3:no}"} />$0'
+# `action-sendmessage`
+  'Widget ActionSendMessage':
+    'description': 'Sends a specified message back up the widget tree.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#ActionSendMessageWidget'
+    'prefix': 'action-sendmessage'
+    'body': '<$action-sendmessage $message="${1:tm-new-tiddler}"${2: title=<<currentTiddler>> tags="[[tag]]"} />$0'
+# `action-setfield`
+  'Widget ActionSetField':
+    'description': 'Assigns values to the specified fields of a tiddler.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#ActionSetFieldWidget'
+    'prefix': 'action-setfield'
+    'body': '<$action-setfield${1: $tiddler=${2:<<currentTiddler>>}}${3: tags="[[tag]]"} />$0'
