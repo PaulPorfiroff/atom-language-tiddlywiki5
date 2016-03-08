@@ -1,4 +1,246 @@
 '.text.html.tw5':
+  # `macrodef`
+  'Macro Definition':
+    'prefix': 'def'
+    'body': """
+    \\\\define ${1:name}($2)
+    $3
+    \\\\end
+
+    """
+
+  # `rules`
+  'Rules':
+    'prefix': 'rules'
+    'body': """
+    \\\\rules ${1:only} ${2:rules}$0
+
+    """
+  'Rules Plain Text':
+    # Why not?
+    'prefix': 'rulesoff'
+    'body': """
+    \\\\rules only rules
+    \\\\rules except rules
+
+    """
+
+  # `codeblock`
+  'Code':
+    'prefix': 'code'
+    'body': """
+    ```${1:js}
+    $2
+    ```
+    """
+
+  # `typedblock`
+  'Typed Block':
+    'prefix': 'tb'
+    'body': """
+    $$$${1:text/vnd.tiddlywiki}
+    $2
+    $$$
+    """
+  'Typed Block With Render Type':
+    'prefix': 'tbt'
+    'body': """
+    $$$${1:text/vnd.tiddlywiki} > ${2:text/html}
+    $3
+    $$$
+    """
+
+  # `styleblock`
+  'Style':
+    'prefix': 'style'
+    'body': """
+    @@${1:.class1.class2}
+    @@${2:text-transform:uppercase;}
+    $3
+    @@
+    """
+
+  # `quoteblock`
+  'Blockquote':
+    'prefix': 'qb'
+    'body': """
+    <<<
+    $1
+    <<<
+    """
+  'Blockquote With Bottom Cite':
+    'prefix': 'qbbc'
+    'body': """
+    <<<
+    $1
+    <<< ${2:cite}
+    """
+
+  # `filteredtranscludeblock`
+  # `filteredtranscludeinline`
+  'Filtered Transclusion':
+    'prefix': 'ftr'
+    'body': '{{{${1:[is[current]]}}}}$0'
+  'Filtered Transclusion With Template':
+    'prefix': 'ftrt'
+    'body': '{{{${1:[is[current]]}||${2:template}}}}$0'
+
+  # `transcludeblock`
+  # `transcludeinline`
+  'Transclusion':
+    'prefix': 'tr'
+    'body': '{{${1:tiddler}}}$0'
+  'Transclusion Of Field':
+    'prefix': 'tf'
+    'body': '{{${1:}!!${2:title}}}$0'
+  'Transclusion Of Data Index':
+    'prefix': 'ti'
+    'body': '{{${1:}##${2:index}}}$0'
+  'Transclusion With Template':
+    'prefix': 'trt'
+    'body': '{{${1:tiddler}||${2:template}}$0'
+  'Transclusion Of Field With Template':
+    'prefix': 'tft'
+    'body': '{{${1:}!!${2:title}||${3:template}}$0'
+  'Transclusion Of Data Index With Template':
+    'prefix': 'tit'
+    'body': '{{${1:}##${2:index}||${3:template}}$0'
+
+  # `table`
+  # @NOTE:
+  # Maintain a left-to-right, top-to-bottom order for consistency.
+  'Table':
+    'prefix': 'table'
+    'body': """
+    |${1:Data One}   |${2:Data Two}  |
+    |${3:Data Three} |${4:Data Four} |
+    """
+  'Table With Row Headers':
+    'prefix': 'tabler'
+    'body': """
+    |${1:Header One} |${2:Header Two} |h
+    |${3:Data One}   |${4:Data Two}   |
+    """
+  'Table With Column Headers':
+    'prefix': 'tablec'
+    'body': """
+    |!${1:Header One} |${2:Data One} |
+    |!${3:Header Two} |${4:Data Two} |
+    """
+  'Table With Row And Column Headers':
+    'prefix': 'tablerc'
+    'body': """
+    |                 |${1:Header One} |h
+    |!${2:Header One} |${3:Data One}   |
+    |!${4:Header Two} |${5:Data Two}   |
+    """
+
+  # `list`
+  'Quote':
+    'prefix': 'q'
+    'body': '> '
+  'Ordered List':
+    'prefix': 'ol'
+    'body': '# ${1:item 1}'
+  'Unordered List':
+    'prefix': 'ul'
+    'body': '* ${1:item}'
+  'Description List':
+    'prefix': 'dl'
+    'body': """
+    ; ${1:term}
+      : ${2:description}
+    """
+
+  # `heading`
+  'Heading 1':
+    'prefix': 'h1'
+    'body': '!$0 ${1:Heading 1}'
+  'Heading 2':
+    'prefix': 'h2'
+    'body': '<h2>$1</h2>$0'
+  'Heading 3':
+    'prefix': 'h3'
+    'body': '<h3>$1</h3>$0'
+  'Heading 4':
+    'prefix': 'h4'
+    'body': '<h4>$1</h4>$0'
+  'Heading 5':
+    'prefix': 'h5'
+    'body': '<h5>$1</h5>$0'
+  'Heading 6':
+    'prefix': 'h6'
+    'body': '<h6>$1</h6>$0'
+
+  # `horizrule`
+  'Horizontal Rule':
+    'prefix': 'hr'
+    'body': """
+    ---
+
+    """
+
+  # `emphasis`
+  'Bold':
+    'prefix': 'b'
+    'body': '\'\'$1\'\'$0'
+  'Italic':
+    'prefix': 'i'
+    'body': '//$1//$0'
+  'Underscore':
+    'prefix': 'u'
+    'body': '__$1__$0'
+  'Superscript':
+    'prefix': 'sup'
+    'body': '^^$1^^$0'
+  'Subscript':
+    'prefix': 'sub'
+    'body': ',,$1,,$0'
+  'Strikethrough':
+    'prefix': 's'
+    'body': '~~$1~~$0'
+
+  # `codeinline`
+  'Code Inline':
+    'prefix': ''
+
+  # `hardlinebreaks`
+  'Preformatted Text':
+    'prefix': 'pre'
+    'body': """
+      \"\"\"
+      $0
+      \"\"\"
+    """
+
+  # `image`
+  'Image':
+    'prefix': 'img'
+    'body': '[img[${1:URL}]]$0'
+  'Image With Tooltip':
+    'prefix': 'imgt'
+    'body': '[img[${1:Tooltip}|${2:URL}]]$0'
+
+  # `link`
+  'Link':
+    'prefix': 'l'
+    'body': '[[${2:URL}]]$0'
+  'Link With Title':
+    'prefix': 'lt'
+    'body': '[[${1:Title}|${2:URL}]]$0'
+
+  # `commentblock`
+  # `commentinline`
+  'Comment':
+    'prefix': '--'
+    'body': '<!-- $1 -->$0'
+
+  # `macrocallblock`
+  # `macrocallinline`
+  'Macro Call':
+    'prefix': 'call'
+    'body': '<<${1:variable}>>$0'
+
 # `macrocall`
   'Widget Macrocall':
     'description': 'Provides more flexible way for invoking macros.'
