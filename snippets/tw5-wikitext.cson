@@ -440,3 +440,11 @@
     'descriptionMoreURL': 'http://tiddlywiki.com/#ActionSetFieldWidget'
     'prefix': 'action-setfield'
     'body': '<$action-setfield${1: $tiddler=${2:<<currentTiddler>>}}${3: tags="[[tag]]"} />$0'
+
+'.macro.body.tw5':
+  'Variable Parameter':
+    'prefix': 'vp'
+    'body': '$${1:parameter}$$0'
+  'Variable Reference':
+    'prefix': 'vr'
+    'body': '$(${1:currentTiddler})$$0'
