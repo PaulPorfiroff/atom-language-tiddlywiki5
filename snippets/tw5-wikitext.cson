@@ -1,3 +1,163 @@
+'.text.html.tw5':
+# `macrocall`
+  'Widget Macrocall':
+    'description': 'Provides more flexible way for invoking macros.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#Macrocall'
+    'prefix': 'macrocall'
+    'body': '<$macrocall $name="${1:variable}" ${2:param1}=${3:<<currentTiddler>>} />$0'
+
+# `vars`
+  'Widget Vars':
+    'description': 'Allows multiple variables to be set in one operation.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#VarsWidget'
+    'prefix': 'vars'
+    'body': """
+    <$vars ${1:name}=${2:<<currentTiddler>>}>
+      $3
+    </$vars>$0
+    """
+
+# `list`
+  'Widget List':
+    'description': 'Displays a sequence of tiddlers that match a filter expression.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#ListWidget'
+    'prefix': 'list'
+    'body': """
+    <$list filter="${1:[is[current]]}">
+      ${2:<<currentTiddler>>}
+    </$list>$0
+    """
+  'Widget List With Custom Variable':
+    'prefix': 'listv'
+    'body': """
+    <$list filter="${1:[is[current]]}" variable="${2:item}">
+      ${3:<<item>>}
+    </$list>$0
+    """
+# `count`
+  'Widget Count':
+    'description': 'Displays the number of matches to a filter expression.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#CountWidget'
+    'prefix': 'count'
+    'body': '<$count filter="${1:[is[current]]}" />$0'
+
+# `view`
+  'Widget View':
+    'description': 'Displays the contents of a tiddler field or index in a specified format.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#ViewWidget'
+    'prefix': 'view'
+    'body': '<$view ${1:tiddler=${2:<<currentTiddler>>} }field="${3:modified}" format="${4:date}" template="${5:YYYY.0MM.0DD}" />$0'
+
+# `reveal`
+  'Widget Reveal':
+    'description': 'Hides or shows its content depending upon the value of a state tiddler.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#RevealWidget'
+    'prefix': 'reveal'
+    'body': """
+    <$reveal type="${1:match}" state=${2:"$:/state/${3:state}"}text="$4">
+      $5
+    </$reveal>$0
+    """
+  'Widget Reveal With Popup':
+    'prefix': 'revealp'
+    'body': """
+    <$reveal type="popup" popup=${1:"$:/state/${2:state}"}>
+      $3
+    </$reveal>$0
+    """
+# `scrollable`
+  'Widget Scrollable':
+    'description': 'Wraps content in a scrollable frame.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#ScrollableWidget'
+    'prefix': 'scrollable'
+    'body': """
+    <$scrollable class="${1:tc-scrollable-demo}">
+      $2
+    </$scrollable>$0
+    """
+
+# `edit-text`
+  'Widget EditText':
+    'description': 'Provides a user interface in the browser for editing text tiddler fields and indices.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#EditTextWidget'
+    'prefix': 'edit-text'
+    'body': '<$edit-text ${1:tiddler=${2:<<currentTiddler>>} }field="${3:text}" />$0'
+# `select`
+  'Widget Select':
+    'description': 'Displays a popup menu based on a HTML `select` element.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#SelectWidget'
+    'prefix': 'select'
+    'body': """
+    <$select ${1:tiddler=${2:<<currentTiddler>>} }field="${3:text}">
+      <option${4: value="${5:option}"}>${6:option}</option>
+    </$select>$0
+    """
+# `checkbox`
+  'Widget Checkbox':
+    'description': 'Displays an HTML checkbox input bound to a specified tiddler tag, field or index.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#CheckboxWidget'
+    'prefix': 'checkbox'
+    'body': """
+    <$checkbox ${1:tiddler=${2:<<currentTiddler>>} }field="${3:text}" checked="${4:true}" unchecked="${5:false}">
+      ${6:Label}
+    </$checkbox>$0
+    """
+  'Widget Checkbox Bound To Tag':
+    'prefix': 'checkboxt'
+    'body': """
+    <$checkbox ${1:tiddler=${2:<<currentTiddler>>} }tag="$3">
+      ${4:Label}
+    </$checkbox>$0
+    """
+# `radio`
+  'Widget Radio':
+    'description': 'Displays an HTML radio input bound to a specified tiddler field.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#RadioWidget'
+    'prefix': 'radio'
+    'body': """
+    <$radio ${1:tiddler=${2:<<currentTiddler>>} }field="${3:text}" value="${4:option}">
+      ${5:Label}
+    </$radio>$0'
+    """
+# `button`
+  'Widget Button':
+    'description': 'Displays an HTML element that can perform a combination of optional actions when clicked.'
+    'descriptionMoreURL': 'http://tiddlywiki.com/#ButtonWidget'
+    'prefix': 'button'
+    'body': """
+    <$button>
+      ${1:Label}
+    </$button>$0
+    """
+  'Widget Button Set Value':
+    'prefix': 'buttont'
+    'body': """
+    <$button set="$1!!${2:title}" setTo=${2:{{$3!!${4:title}\\}\\}}>
+      ${5:Label}
+    </$button>$0
+    """
+  'Widget Button Send Message':
+    'prefix': 'buttonm'
+    'body': """
+    <$button message="${1:tm-notify}" param=${2:<<currentTiddler>>}>
+      ${3:Label}
+    </$button>$0
+    """
+  'Widget Button Navigate To':
+    'prefix': 'buttonn'
+    'body': """
+    <$button to="{1:<<currentTiddler>>}>
+      ${2:Label}
+    </$button>$0
+    """
+  'Widget Button With Popup':
+    'prefix': 'buttonp'
+    'body': """
+    <$button popup=${1:"$:/state/${2:state}"}>
+      ${3:Label}
+    </$button>$0
+    """
+
 """
 .meta.widget.tw-button.tw5 > .meta.body.tw5,
 .meta.widget.tw-keyboard.tw5 > .meta.body.tw5
