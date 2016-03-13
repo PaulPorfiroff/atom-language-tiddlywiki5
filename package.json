@@ -1,7 +1,7 @@
 {
   "name": "language-tiddlywiki5",
   "description": "TiddlyWiki5 wikitext and file formats support.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "keywords": [
     "language",
     "syntax",
