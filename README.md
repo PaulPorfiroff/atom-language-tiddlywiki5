@@ -6,12 +6,13 @@ A package for [Atom](https://atom.io) text editor, that provides a bunch of gram
 
 This package provides the following grammars:
 
-|Name                  |Description                                                  |
-|----------------------|-------------------------------------------------------------|
-|TiddlyWiki5           |[TW5 wiki markup](http://tiddlywiki.com/WikiText)            |
-|TiddlyWiki5 dictionary|[Data dictionary](http://tiddlywiki.com/#DictionaryTiddlers) |
-|TiddlyWiki5 tid file  |[__*.tid__](http://tiddlywiki.com/#TiddlerFiles) file format |
-|TiddlyWiki5 meta file |[__*.meta__](http://tiddlywiki.com/#TiddlerFiles) file format|
+|Name                    |Description                                                          |
+|------------------------|---------------------------------------------------------------------|
+|TiddlyWiki5             |[TW5 wiki markup](http://tiddlywiki.com/WikiText)                    |
+|TiddlyWiki5 dictionary  |[Data dictionary](http://tiddlywiki.com/#DictionaryTiddlers)         |
+|TiddlyWiki5 tid file    |[__*.tid__](http://tiddlywiki.com/#TiddlerFiles) file format         |
+|TiddlyWiki5 meta file   |[__*.meta__](http://tiddlywiki.com/#TiddlerFiles) file format        |
+|TiddlyWiki5 multids file|[__*.multids__](http://tiddlywiki.com/#MultiTiddlerFiles) file format|
 
 ## Hacks and tips
 
